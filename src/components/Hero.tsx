@@ -1,26 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import OptionalImage from "./OptionalImage";
-
-const HERO_VIDEOS = [
-  "/images/brands/hero-bg.mp4",
-  "/images/brands/leaves-bg.mp4",
-  "/images/brands/leaf-bg.mp4",
-];
+import { useEffect, useRef } from "react";
 
 export default function Hero() {
   const particlesRef = useRef<HTMLDivElement>(null);
-  const [vidIdx, setVidIdx] = useState(0);
-  const [fading, setFading] = useState(false);
-
-  function handleVideoEnd() {
-    setFading(true);
-    setTimeout(() => {
-      setVidIdx((i) => (i + 1) % HERO_VIDEOS.length);
-      setFading(false);
-    }, 600);
-  }
 
   useEffect(() => {
     const container = particlesRef.current;
@@ -47,19 +30,17 @@ export default function Hero() {
 
   return (
     <section className="hero" id="home">
-      {/* ── VIDEO BACKGROUND — cycles hero-bg → leaves-bg → leaf-bg ── */}
+      {/* ── VIDEO BACKGROUND ── */}
       <video
-        key={vidIdx}
-        className={`hero-video-bg${fading ? " hero-video-fading" : ""}`}
+        className="hero-video-bg"
         autoPlay
+        loop
         muted
         playsInline
         aria-hidden="true"
-        onEnded={handleVideoEnd}
       >
-        <source src={HERO_VIDEOS[vidIdx]} type="video/mp4" />
+        <source src="/images/brands/hero-bg.mp4" type="video/mp4" />
       </video>
-      <div className="hero-video-overlay" aria-hidden="true" />
 
       <div className="particles" ref={particlesRef} />
 
@@ -138,43 +119,6 @@ export default function Hero() {
               <sup>+</sup>
             </div>
             <div className="stat-label">Wellness Brands</div>
-          </div>
-        </div>
-      </div>
-
-      {/* ── RIGHT VISUAL ── */}
-      <div className="hero-visual">
-        <div className="visual-ring">
-          <div className="ring-outer" />
-          <div className="ring-mid" />
-          <div className="ring-inner" />
-
-          {/* Glow pulse behind image */}
-          <div className="ring-glow" />
-
-          {/* Orbiting pills */}
-          <div className="orbit-item">🌿</div>
-          <div className="orbit-item">💊</div>
-          <div className="orbit-item">🧬</div>
-          <div className="orbit-item">⚗️</div>
-
-          {/* Main hero image — large floating circle */}
-          <div className="ring-center">
-            <OptionalImage
-              src="/images/hero/hero.jpeg"
-              alt="Nirogyn product visual"
-              fill
-              className="ring-center-img"
-              sizes="(max-width:900px) 0px, 320px"
-              priority
-            />
-            {/* Gradient overlay + text badge */}
-            <div className="ring-center-overlay">
-              <div className="ring-center-badge">
-                <small>Science Backed</small>
-                Wellness
-              </div>
-            </div>
           </div>
         </div>
       </div>

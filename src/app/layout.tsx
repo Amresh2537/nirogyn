@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display, DM_Sans } from "next/font/google";
+import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import Cursor from "@/components/Cursor";
 import ScrollProgress from "@/components/ScrollProgress";
@@ -13,10 +13,10 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
-const dmSans = DM_Sans({
+const jakartaSans = Plus_Jakarta_Sans({
   variable: "--font-dm-sans",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -42,7 +42,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-scroll-behavior="smooth">
-      <body className={`${playfair.variable} ${dmSans.variable}`}>
+      <body className={`${playfair.variable} ${jakartaSans.variable}`}>
         <Cursor />
         <ScrollProgress />
         {children}

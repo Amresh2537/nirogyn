@@ -46,23 +46,6 @@ export default function Hero() {
 
       {/* ── LEFT CONTENT ── */}
       <div className="hero-content">
-        <div className="hero-eyebrow">
-          <span className="eyebrow-line" />
-          Science · Nutrition · Wellness
-        </div>
-
-        <h1 className="hero-headline">
-          Better Health.
-          <br />
-          <em>Backed by Science.</em>
-        </h1>
-
-        <p className="hero-sub">
-          Evidence-based information to help you understand your body, make
-          better choices, and live your healthiest life — built for India, by
-          India.
-        </p>
-
         <div className="hero-actions">
           <a href="#topics" className="btn-primary">
             <span>Explore Topics</span>

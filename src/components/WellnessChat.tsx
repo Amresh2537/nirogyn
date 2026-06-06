@@ -102,7 +102,7 @@ export default function WellnessChat() {
             <circle cx="15" cy="10" r="0.8" fill="currentColor" />
           </svg>
         )}
-        {!open && <span className="chat-fab-label">Ask Niro</span>}
+        {!open && <span className="chat-fab-label">Ask Nirogyn</span>}
       </button>
 
       {/* ── CHAT PANEL ── */}

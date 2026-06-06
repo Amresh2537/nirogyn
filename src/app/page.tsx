@@ -6,6 +6,7 @@ import Topics from "@/components/Topics";
 import Ingredients from "@/components/Ingredients";
 import Brands from "@/components/Brands";
 import Articles from "@/components/Articles";
+import HomeFAQ from "@/components/HomeFAQ";
 import Newsletter from "@/components/Newsletter";
 import Footer from "@/components/Footer";
 import WellnessChat from "@/components/WellnessChat";
@@ -22,6 +23,7 @@ export default function Home() {
         <Ingredients />
         <Brands />
         <Articles />
+        <HomeFAQ />
         <Newsletter />
       </main>
       <Footer />

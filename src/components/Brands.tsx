@@ -1,5 +1,6 @@
 "use client";
 import { useRef } from "react";
+import Link from "next/link";
 import OptionalImage from "./OptionalImage";
 /**
  * BRAND IMAGE SLOTS
@@ -20,6 +21,7 @@ const BRANDS = [
     name: "ISOCHIA",
     desc: "Daily fiber for smooth digestion & gut health. Science-backed, India-formulated.",
     link: "Explore ISOCHIA",
+    href: "/brands/isochia",
     delay: "",
   },
   {
@@ -28,7 +30,8 @@ const BRANDS = [
     emoji: "🐻",
     name: "Captain Gummy",
     desc: "Nutrition gummies for kids — made fun, made healthy, made with love.",
-    link: "Explore Captain Gummy",
+    link: "Explore Captain Gummies",
+    href: "/brands/captain-gummies",
     delay: "reveal-delay-1",
   },
   {
@@ -37,8 +40,9 @@ const BRANDS = [
     emoji: "⚡",
     name: "POWERSHILA",
     desc: "Strength, stamina & performance support for those who push their limits.",
-    link: "Explore POWERSHILA",
-    delay: "reveal-delay-2",
+    link: "Explore PowerShilla",
+    href: "/brands/powershila",
+    delay: "reveal-delay-3",
   },
   {
     cls: "pretty",
@@ -47,13 +51,15 @@ const BRANDS = [
     name: "Pretty Energy",
     desc: "Clean energy for her — no jitters, no crash, just radiant focus all day.",
     link: "Explore Pretty Energy",
-    delay: "reveal-delay-3",
+    href: "/brands/pretty-energy",
+    delay: "reveal-delay-4",
   },
 ];
 
 type Brand = (typeof BRANDS)[0];
 
-function BrandCard({ cls, img, emoji, name, desc, link, delay }: Brand) {
+function BrandCard({ cls, img, emoji, name, desc, link, href, delay, index }: Brand & { index: number }) {
+  const isLeft = index % 2 === 0;
   const ref = useRef<HTMLDivElement>(null);
 
   function onMouseMove(e: React.MouseEvent<HTMLDivElement>) {
@@ -78,7 +84,7 @@ function BrandCard({ cls, img, emoji, name, desc, link, delay }: Brand) {
   return (
     <div
       ref={ref}
-      className={`brand-card ${cls} reveal ${delay}`}
+      className={`brand-card ${cls} ${isLeft ? "reveal-split-left" : "reveal-split-right"} ${delay}`}
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
     >
@@ -105,9 +111,9 @@ function BrandCard({ cls, img, emoji, name, desc, link, delay }: Brand) {
       </div>
       <div className="brand-name">{name}</div>
       <p className="brand-desc">{desc}</p>
-      <a href="#" className="brand-link">
+      <Link href={href} className="brand-link">
         {link} <span className="brand-link-arrow">→</span>
-      </a>
+      </Link>
     </div>
   );
 }
@@ -115,14 +121,13 @@ function BrandCard({ cls, img, emoji, name, desc, link, delay }: Brand) {
 export default function Brands() {
   return (
     <section className="brands-section" id="brands">
-      {/* Subtle ashwagandha video bg */}
-      <video
-        className="brands-video-bg"
-        autoPlay muted loop playsInline
-        aria-hidden="true"
-      >
-        <source src="/images/brands/ashwagandha-bg.mp4" type="video/mp4" />
-      </video>
+      {/* Animated ambient blobs */}
+      <div className="brands-blob-wrap" aria-hidden="true">
+        <div className="brands-blob brands-blob-1" />
+        <div className="brands-blob brands-blob-2" />
+        <div className="brands-blob brands-blob-3" />
+        <div className="brands-blob brands-blob-4" />
+      </div>
       <div style={{ textAlign: "center", marginBottom: "3.5rem" }}>
         <div
           className="section-tag reveal"
@@ -145,8 +150,8 @@ export default function Brands() {
       </div>
 
       <div className="brands-grid">
-        {BRANDS.map((brand) => (
-          <BrandCard key={brand.name} {...brand} />
+        {BRANDS.map((brand, i) => (
+          <BrandCard key={brand.name} {...brand} index={i} />
         ))}
       </div>
     </section>

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const READ_ITEMS = [
   { label: "EAT",        color: "var(--lime)" },
@@ -16,7 +17,13 @@ const SCIENCE_ITEMS = [
   "Myth vs Science",
 ];
 
-const COMPANY_ITEMS = ["About Us", "Our Brands", "Careers", "Media", "Contact Us"];
+const COMPANY_ITEMS = [
+  { label: "About Us",   href: "/about" },
+  { label: "Our Brands", href: "/brands" },
+  { label: "Write for Us", href: "/write" },
+  { label: "FAQ",        href: "/faq" },
+  { label: "Contact Us", href: "/contact" },
+];
 
 const BADGES = ["FDA", "FSSAI", "GMP", "CE", "ISO 9001:2015"];
 
@@ -102,8 +109,8 @@ export default function Footer() {
           <div className="footer-col-title">Company</div>
           <ul className="footer-links">
             {COMPANY_ITEMS.map((item) => (
-              <li key={item}>
-                <a href="#">{item}</a>
+              <li key={item.label}>
+                <Link href={item.href}>{item.label}</Link>
               </li>
             ))}
           </ul>
@@ -113,9 +120,9 @@ export default function Footer() {
       <div className="footer-bottom">
         <span>© 2026 Nirogyn Healthcare Pvt. Ltd. All rights reserved.</span>
         <div className="footer-legal">
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms &amp; Conditions</a>
-          <a href="#">Disclaimer</a>
+          <Link href="/privacy">Privacy Policy</Link>
+          <Link href="/terms">Terms &amp; Conditions</Link>
+          <Link href="/disclaimer">Disclaimer</Link>
         </div>
       </div>
     </footer>

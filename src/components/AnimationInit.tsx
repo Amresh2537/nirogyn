@@ -19,7 +19,7 @@ export default function AnimationInit() {
 
   useEffect(() => {
     // Scroll reveal — re-observe on every route change
-    const reveals = document.querySelectorAll<HTMLElement>(".reveal");
+    const reveals = document.querySelectorAll<HTMLElement>(".reveal, .reveal-top");
     const revealObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {

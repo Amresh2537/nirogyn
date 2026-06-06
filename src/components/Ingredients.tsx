@@ -18,22 +18,13 @@ const INGREDIENTS = [
   { emoji: "☀️", img: "vitamin-d3",       name: "Vitamin D3",        desc: "Immunity, bones & mood support",                tag: "Vitamin",   delay: "reveal-delay-1" },
   { emoji: "👁️", img: "lutein",           name: "Lutein",            desc: "Eye health & vision support",                   tag: "Carotenoid",delay: "reveal-delay-2" },
   { emoji: "🌱", img: "chia-seeds",       name: "Chia Seeds",        desc: "Fiber, omega-3 & heart health",                 tag: "Superfood", delay: "reveal-delay-3" },
-  { emoji: "🪨", img: "magnesium-citrate",name: "Magnesium Citrate", desc: "Sleep, muscle function & stress support",       tag: "Mineral",   delay: "" },
-  { emoji: "🌾", img: "psyllium-husk",    name: "Psyllium Husk",     desc: "Digestive health, regularity & cholesterol",    tag: "Fiber",     delay: "reveal-delay-1" },
+  { emoji: "🪨", img: "magnesium-citrate",name: "Magnesium Citrate", desc: "Sleep, muscle function & stress support",       tag: "Mineral",   delay: "reveal-delay-4" },
+  { emoji: "🌾", img: "psyllium-husk",    name: "Psyllium Husk",     desc: "Digestive health, regularity & cholesterol",    tag: "Fiber",     delay: "reveal-delay-5" },
 ];
 
 export default function Ingredients() {
   return (
     <section className="ingredients-section" id="ingredients">
-      {/* Ashwagandha / turmeric video — blends with dark forest bg */}
-      <video
-        className="ingredients-video-bg"
-        autoPlay muted loop playsInline
-        aria-hidden="true"
-      >
-        <source src="/images/ingredients/ingredients-bg.mp4" type="video/mp4" />
-      </video>
-      <div className="ingredients-video-overlay" aria-hidden="true" />
 
       <div className="ingredients-inner">
         <div
@@ -69,25 +60,23 @@ export default function Ingredients() {
           </a>
         </div>
 
-        <div className="ingredients-scroll">
-          <div className="ingredients-track">
-            {[...INGREDIENTS, ...INGREDIENTS].map(({ emoji, img, name, desc, tag }, idx) => (
-              <div className="ingredient-card" key={`${name}-${idx}`}>
-                <div className="ing-img-wrap">
-                  <span className="ing-emoji-fallback">{emoji}</span>
-                  <OptionalImage
-                    src={`/images/ingredients/${img}.jpeg`}
-                    alt={name}
-                    fill
-                    sizes="82px"
-                  />
-                </div>
-                <div className="ing-name">{name}</div>
-                <div className="ing-desc">{desc}</div>
-                <span className="ing-tag">{tag}</span>
+        <div className="ingredients-grid">
+          {INGREDIENTS.map(({ emoji, img, name, desc, tag, delay }) => (
+            <div className={`ingredient-card reveal-top ${delay}`} key={name}>
+              <div className="ing-img-wrap">
+                <span className="ing-emoji-fallback">{emoji}</span>
+                <OptionalImage
+                  src={`/images/ingredients/${img}.jpeg`}
+                  alt={name}
+                  fill
+                  sizes="82px"
+                />
               </div>
-            ))}
-          </div>
+              <div className="ing-name">{name}</div>
+              <div className="ing-desc">{desc}</div>
+              <span className="ing-tag">{tag}</span>
+            </div>
+          ))}
         </div>
       </div>
     </section>

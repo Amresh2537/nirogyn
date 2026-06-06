@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
-import Cursor from "@/components/Cursor";
 import ScrollProgress from "@/components/ScrollProgress";
 import AnimationInit from "@/components/AnimationInit";
 
@@ -43,7 +42,6 @@ export default function RootLayout({
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <body className={`${playfair.variable} ${jakartaSans.variable}`}>
-        <Cursor />
         <ScrollProgress />
         {children}
         <AnimationInit />

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import OptionalImage from "./OptionalImage";
+import { getPublishedPosts } from "@/lib/posts";
 
 /**
  * ARTICLE IMAGE SLOTS
@@ -22,7 +23,14 @@ const MINI_ARTICLES = [
   { num: "05", cat: "Men's Health",   title: "Ashwagandha for Stress: What Science Actually Says",       read: "4 min read", img: "article-4",   emoji: "💪", delay: "reveal-delay-4", href: "#" },
 ];
 
-export default function Articles() {
+export default async function Articles() {
+  // Load CMS posts (published) and merge with static mini articles
+  const cmsPosts = getPublishedPosts().slice(0, 4);
+  const cmsHrefs = new Set(cmsPosts.map((p) => `/blog/${p.slug}`));
+
+  // Filter static articles that aren't already represented by CMS posts
+  const staticArticles = MINI_ARTICLES.filter((a) => !cmsHrefs.has(a.href));
+
   return (
     <section className="articles-section" id="articles">
       <div
@@ -37,7 +45,7 @@ export default function Articles() {
           <div className="section-tag reveal">Latest</div>
           <h2 className="section-title reveal reveal-delay-1">From Our Blog</h2>
         </div>
-        <a href="#" className="btn-ghost reveal">
+        <a href="/blog" className="btn-ghost reveal">
           View All Articles ↗
         </a>
       </div>
@@ -70,8 +78,30 @@ export default function Articles() {
         </Link>
 
         {/* ── MINI ARTICLES ── */}
+        {/* ── MINI ARTICLES (static + CMS) ── */}
         <div className="articles-list">
-          {MINI_ARTICLES.map(({ num, cat, title, read, img, emoji, delay, href }) => (
+          {cmsPosts.map((post, i) => (
+            <Link href={`/blog/${post.slug}`} className="article-mini reveal" key={post.id}>
+              <div className="mini-num">{String(i + 1).padStart(2, "0")}</div>
+              <div className="mini-content">
+                <div className="mini-cat">{post.category || "Wellness"}</div>
+                <div className="mini-title">{post.title}</div>
+                <div className="mini-read">{post.readTime || "Read article"}</div>
+              </div>
+              <div className="mini-thumb">
+                <div className="mini-thumb-emoji">🌿</div>
+                {post.featuredImage && (
+                  <OptionalImage
+                    src={post.featuredImage}
+                    alt={post.title}
+                    fill
+                    sizes="60px"
+                  />
+                )}
+              </div>
+            </Link>
+          ))}
+          {staticArticles.map(({ num, cat, title, read, img, emoji, delay, href }) => (
             <Link href={href} className={`article-mini reveal ${delay}`} key={num}>
               <div className="mini-num">{num}</div>
               <div className="mini-content">
@@ -79,9 +109,7 @@ export default function Articles() {
                 <div className="mini-title">{title}</div>
                 <div className="mini-read">{read}</div>
               </div>
-              {/* IMAGE SLOT — small thumbnail, fallback to emoji */}
               <div className="mini-thumb">
-                {/* Emoji renders first (behind), image renders on top */}
                 <div className="mini-thumb-emoji">{emoji}</div>
                 <OptionalImage
                   src={`/images/articles/${img}.jpg`}

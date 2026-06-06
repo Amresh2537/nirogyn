@@ -1,18 +1,20 @@
 const TRUST_ITEMS = [
-  { icon: "🔬", label: "Evidence Based Research" },
-  { icon: "👨‍⚕️", label: "Medically Reviewed" },
-  { icon: "🇮🇳", label: "Made for India" },
-  { icon: "✅", label: "Honest & Transparent" },
-  { icon: "🌿", label: "No Hype. Just Science." },
+  { icon: "🛡", title: "Expert-Backed", sub: "Trusted by health professionals" },
+  { icon: "🧪", title: "Evidence-Based", sub: "Science you can rely on" },
+  { icon: "◷", title: "Easy to Understand", sub: "Simple, clear & actionable" },
+  { icon: "◎", title: "For the Whole Family", sub: "Health for every stage of life" },
 ];
 
 export default function TrustBar() {
   return (
     <div className="trust-bar">
-      {TRUST_ITEMS.map(({ icon, label }) => (
-        <div className="trust-item" key={label}>
+      {TRUST_ITEMS.map(({ icon, title, sub }) => (
+        <div className="trust-item" key={title}>
           <span className="trust-icon">{icon}</span>
-          {label}
+          <div className="trust-copy">
+            <div className="trust-title">{title}</div>
+            <div className="trust-sub">{sub}</div>
+          </div>
         </div>
       ))}
     </div>

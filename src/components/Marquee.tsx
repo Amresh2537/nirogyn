@@ -21,7 +21,6 @@ export default function Marquee() {
         {all.map((item, i) => (
           <div className="marquee-item" key={i}>
             {item}
-            <span className="marquee-dot" />
           </div>
         ))}
       </div>

@@ -1,13 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Marquee from "./Marquee";
 
 export default function Navbar() {
   const [isHovering, setIsHovering] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const navTextColor = isHovering ? "#1a3c1e" : "#ffffff";
-  const mutedTextColor = isHovering ? "#79917c" : "rgba(255,255,255,0.7)";
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 900px)");
+
+    const syncMobileState = () => setIsMobile(mediaQuery.matches);
+    syncMobileState();
+    mediaQuery.addEventListener("change", syncMobileState);
+
+    return () => mediaQuery.removeEventListener("change", syncMobileState);
+  }, []);
+
   const topics = [
     { label: "EAT", href: "#topics" },
     { label: "MOVE", href: "#ingredients" },
@@ -33,7 +44,7 @@ export default function Navbar() {
           right: 0,
           zIndex: 119,
           display: "grid",
-          gridTemplateColumns: "1fr auto 1fr",
+          gridTemplateColumns: isMobile ? "42px 1fr 42px" : "1fr auto 1fr",
           alignItems: "center",
           gap: "0.5rem",
           padding: "0.75rem 1.15rem",
@@ -44,29 +55,9 @@ export default function Navbar() {
         }}
       >
       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", justifySelf: "start" }}>
-        <button
-          aria-label="Open menu"
-          type="button"
-          style={{
-            width: "42px",
-            height: "42px",
-            border: `1px solid ${isHovering ? "rgba(16,63,34,0.2)" : "rgba(255,255,255,0.45)"}`,
-            borderRadius: "8px",
-            background: isHovering ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.08)",
-            display: "inline-flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "4px",
-            cursor: "pointer",
-          }}
-        >
-          <span style={{ width: "18px", height: "1.7px", borderRadius: "1px", background: navTextColor }} />
-          <span style={{ width: "18px", height: "1.7px", borderRadius: "1px", background: navTextColor }} />
-          <span style={{ width: "18px", height: "1.7px", borderRadius: "1px", background: navTextColor }} />
-        </button>
+        {isMobile && <div style={{ width: "42px", height: "42px" }} aria-hidden="true" />}
 
-        {topics.map((item, index) => (
+        {!isMobile && topics.map((item) => (
           <div key={item.label} style={{ display: "inline-flex", alignItems: "center" }}>
             <a
               href={item.href}
@@ -86,13 +77,13 @@ export default function Navbar() {
         ))}
       </div>
 
-      <a
-        href="#"
+      <Link
+        href="/"
         style={{
           textDecoration: "none",
           justifySelf: "center",
           fontFamily: "var(--font-playfair), 'Playfair Display', serif",
-          fontSize: "2.3rem",
+          fontSize: isMobile ? "2rem" : "2.3rem",
           fontWeight: 700,
           letterSpacing: "0.02em",
           color: navTextColor,
@@ -100,9 +91,11 @@ export default function Navbar() {
         }}
       >
         NIROGYN
-      </a>
+      </Link>
 
       <div style={{ display: "flex", gap: "0.75rem", alignItems: "center", justifySelf: "end" }}>
+        {!isMobile && (
+          <>
         <form
           action="#articles"
           style={{
@@ -159,11 +152,11 @@ export default function Navbar() {
             borderRadius: "999px",
             border: "2px solid transparent",
             background:
-              `${isHovering ? "linear-gradient(#f7f8f7, #f7f8f7)" : "linear-gradient(rgba(8,14,10,0.2), rgba(8,14,10,0.2))"} padding-box, linear-gradient(90deg, #5676c6 0%, #3d8e88 100%) border-box`,
-            color: navTextColor,
+              `${isHovering ? "linear-gradient(#f7f8f7, #f7f8f7)" : "linear-gradient(rgba(8,14,10,0.2), rgba(8,14,10,0.2))"} padding-box, linear-gradient(90deg, #3f9f58 0%, #7ec85a 100%) border-box`,
+            color: isHovering ? "#2f8a46" : "#9fef7b",
             padding: "0 1.4rem",
             fontSize: "1.05rem",
-            fontWeight: 500,
+            fontWeight: 600,
             textDecoration: "none",
             display: "inline-flex",
             alignItems: "center",
@@ -172,6 +165,9 @@ export default function Navbar() {
         >
           ✦ Ask Niro
         </Link>
+          </>
+        )}
+        {isMobile && <div style={{ width: "42px", height: "42px" }} aria-hidden="true" />}
       </div>
       </nav>
     </>

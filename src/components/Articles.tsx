@@ -16,11 +16,11 @@ import { getPublishedPosts } from "@/lib/posts";
  *   /public/images/articles/article-4.jpg  — Men's health / Ashwagandha
  */
 const MINI_ARTICLES = [
-  { num: "01", cat: "Gut-Brain Axis", title: "90% of Your Serotonin Is Made in Your Gut",                 read: "8 min read", img: "article-gut", emoji: "🧠", delay: "",              href: "/blog/gut-brain-axis" },
-  { num: "02", cat: "Skin Health",    title: "Why Your Diet Is Affecting Your Skin More Than You Think", read: "3 min read", img: "article-1",   emoji: "✨", delay: "reveal-delay-1", href: "#" },
-  { num: "03", cat: "Sleep",          title: "Magnesium for Sleep: Does It Actually Work?",               read: "4 min read", img: "article-2",   emoji: "😴", delay: "reveal-delay-2", href: "#" },
-  { num: "04", cat: "Kids Health",    title: "Essential Nutrients Every Indian Child Needs",              read: "5 min read", img: "article-3",   emoji: "🧒", delay: "reveal-delay-3", href: "#" },
-  { num: "05", cat: "Men's Health",   title: "Ashwagandha for Stress: What Science Actually Says",       read: "4 min read", img: "article-4",   emoji: "💪", delay: "reveal-delay-4", href: "#" },
+  { num: "01", cat: "Gut-Brain Axis", title: "90% of Your Serotonin Is Made in Your Gut",                 read: "8 min read", img: "article-gut", delay: "",              href: "/blog/gut-brain-axis" },
+  { num: "02", cat: "Skin Health",    title: "Why Your Diet Is Affecting Your Skin More Than You Think", read: "3 min read", img: "article-1",   delay: "reveal-delay-1", href: "#" },
+  { num: "03", cat: "Sleep",          title: "Magnesium for Sleep: Does It Actually Work?",               read: "4 min read", img: "article-2",   delay: "reveal-delay-2", href: "#" },
+  { num: "04", cat: "Kids Health",    title: "Essential Nutrients Every Indian Child Needs",              read: "5 min read", img: "article-3",   delay: "reveal-delay-3", href: "#" },
+  { num: "05", cat: "Men's Health",   title: "Ashwagandha for Stress: What Science Actually Says",       read: "4 min read", img: "article-4",   delay: "reveal-delay-4", href: "#" },
 ];
 
 export default async function Articles() {
@@ -89,7 +89,6 @@ export default async function Articles() {
                 <div className="mini-read">{post.readTime || "Read article"}</div>
               </div>
               <div className="mini-thumb">
-                <div className="mini-thumb-emoji">🌿</div>
                 {post.featuredImage && (
                   <OptionalImage
                     src={post.featuredImage}
@@ -101,7 +100,7 @@ export default async function Articles() {
               </div>
             </Link>
           ))}
-          {staticArticles.map(({ num, cat, title, read, img, emoji, delay, href }) => (
+          {staticArticles.map(({ num, cat, title, read, img, delay, href }) => (
             <Link href={href} className={`article-mini reveal ${delay}`} key={num}>
               <div className="mini-num">{num}</div>
               <div className="mini-content">
@@ -110,7 +109,6 @@ export default async function Articles() {
                 <div className="mini-read">{read}</div>
               </div>
               <div className="mini-thumb">
-                <div className="mini-thumb-emoji">{emoji}</div>
                 <OptionalImage
                   src={`/images/articles/${img}.jpg`}
                   alt={title}

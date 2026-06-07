@@ -7,6 +7,7 @@ import Marquee from "./Marquee";
 export default function Navbar() {
   const [isHovering, setIsHovering] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navTextColor = isHovering ? "#1a3c1e" : "#ffffff";
 
   useEffect(() => {
@@ -18,6 +19,12 @@ export default function Navbar() {
 
     return () => mediaQuery.removeEventListener("change", syncMobileState);
   }, []);
+
+  useEffect(() => {
+    if (!isMobile) {
+      setIsMenuOpen(false);
+    }
+  }, [isMobile]);
 
   const topics = [
     { label: "EAT", href: "#topics" },
@@ -65,7 +72,20 @@ export default function Navbar() {
         }}
       >
       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", justifySelf: "start" }}>
-        {isMobile && <div style={{ width: "42px", height: "42px" }} aria-hidden="true" />}
+        {isMobile ? (
+          <button
+            type="button"
+            className={`nav-menu-btn ${isMenuOpen ? "nav-menu-btn--open" : ""}`}
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobileNavMenu"
+            onClick={() => setIsMenuOpen((open) => !open)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+        ) : null}
 
         {!isMobile && topics.map((item) => (
           <a key={item.label} href={item.href} style={topicLinkStyle}>
@@ -149,8 +169,8 @@ export default function Navbar() {
             borderRadius: "999px",
             border: "2px solid transparent",
             background:
-              `${isHovering ? "linear-gradient(#f7f8f7, #f7f8f7)" : "linear-gradient(rgba(8,14,10,0.2), rgba(8,14,10,0.2))"} padding-box, linear-gradient(90deg, #3f9f58 0%, #7ec85a 100%) border-box`,
-            color: isHovering ? "#2f8a46" : "#9fef7b",
+              `${isHovering ? "linear-gradient(#f7f8f7, #f7f8f7)" : "linear-gradient(rgba(8,14,10,0.2), rgba(8,14,10,0.2))"} padding-box, linear-gradient(90deg, #245c2f 0%, #3f874a 100%) border-box`,
+            color: isHovering ? "#1f5a2a" : "#b8f4a2",
             padding: "0 1.4rem",
             fontSize: "1.05rem",
             fontWeight: 600,
@@ -164,8 +184,31 @@ export default function Navbar() {
         </Link>
           </>
         )}
-        {isMobile && <div style={{ width: "42px", height: "42px" }} aria-hidden="true" />}
+        {isMobile && <div className="nav-right-spacer" aria-hidden="true" />}
       </div>
+
+      {isMobile && isMenuOpen && (
+        <div className="nav-mobile-menu" id="mobileNavMenu">
+          <div className="nav-mobile-menu-grid">
+            {topics.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                className="nav-mobile-link"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {item.label}
+              </a>
+            ))}
+            <Link href="/blog" className="nav-mobile-action" onClick={() => setIsMenuOpen(false)}>
+              View Articles
+            </Link>
+            <Link href="/ask" className="nav-mobile-action nav-mobile-action--primary" onClick={() => setIsMenuOpen(false)}>
+              Ask Niro
+            </Link>
+          </div>
+        </div>
+      )}
       </nav>
     </>
   );

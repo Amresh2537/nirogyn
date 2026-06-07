@@ -13,6 +13,9 @@ interface PostForm {
   status: "draft" | "published";
   featured: boolean;
   featuredImage: string;
+  featuredImageAlt: string;
+  seoTitle: string;
+  seoDescription: string;
   readTime: string;
   content: string;
 }
@@ -26,7 +29,7 @@ const CATEGORIES = [
 const EMPTY: PostForm = {
   title: "", slug: "", excerpt: "", author: "Nirogyn Editorial",
   category: "", status: "draft", featured: false,
-  featuredImage: "", readTime: "", content: "",
+  featuredImage: "", featuredImageAlt: "", seoTitle: "", seoDescription: "", readTime: "", content: "",
 };
 
 function slugify(text: string) {
@@ -48,6 +51,8 @@ export default function PostEditor({ postId }: Props) {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [loadError, setLoadError] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadError, setUploadError] = useState("");
 
   const isEdit = !!postId;
 
@@ -70,6 +75,9 @@ export default function PostEditor({ postId }: Props) {
           status: post.status,
           featured: post.featured,
           featuredImage: post.featuredImage ?? "",
+          featuredImageAlt: post.featuredImageAlt ?? post.title,
+          seoTitle: post.seoTitle ?? post.title,
+          seoDescription: post.seoDescription ?? post.excerpt,
           readTime: post.readTime ?? "",
           content: post.content,
         });
@@ -104,9 +112,46 @@ export default function PostEditor({ postId }: Props) {
     setForm((prev) => ({ ...prev, content: editorRef.current?.innerHTML ?? "" }));
   }
 
+  async function handleImageUpload(file: File | null) {
+    if (!file) return;
+    setUploadingImage(true);
+    setUploadError("");
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/admin/uploads", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) {
+        throw new Error("Upload failed");
+      }
+
+      const data = await res.json();
+      setForm((prev) => ({
+        ...prev,
+        featuredImage: data.url,
+        featuredImageAlt: prev.featuredImageAlt || prev.title,
+      }));
+    } catch {
+      setUploadError("Image upload failed. Please try again.");
+    } finally {
+      setUploadingImage(false);
+    }
+  }
+
   async function handleSave(statusOverride?: "draft" | "published") {
     const content = editorRef.current?.innerHTML ?? "";
-    const payload: PostForm = { ...form, content };
+    const payload: PostForm = {
+      ...form,
+      seoTitle: form.seoTitle || form.title,
+      seoDescription: form.seoDescription || form.excerpt,
+      featuredImageAlt: form.featuredImageAlt || form.title,
+      content,
+    };
     if (statusOverride) payload.status = statusOverride;
 
     if (!payload.title.trim()) { alert("Title is required."); return; }
@@ -224,6 +269,27 @@ export default function PostEditor({ postId }: Props) {
                     onChange={(e) => set("readTime", e.target.value)}
                   />
                 </div>
+
+                <div className="admin-field">
+                  <label className="admin-label">SEO Title</label>
+                  <input
+                    className="admin-input"
+                    placeholder="Search-engine friendly title"
+                    value={form.seoTitle}
+                    onChange={(e) => set("seoTitle", e.target.value)}
+                  />
+                </div>
+
+                <div className="admin-field">
+                  <label className="admin-label">SEO Description</label>
+                  <textarea
+                    className="admin-textarea"
+                    rows={3}
+                    placeholder="Meta description for search engines"
+                    value={form.seoDescription}
+                    onChange={(e) => set("seoDescription", e.target.value)}
+                  />
+                </div>
               </div>
             </div>
 
@@ -327,14 +393,16 @@ export default function PostEditor({ postId }: Props) {
             <div className="admin-card">
               <h2 className="admin-card-title">Featured Image</h2>
               <div className="admin-field">
-                <label className="admin-label">Image URL or /public path</label>
+                <label className="admin-label">Upload image</label>
                 <input
                   className="admin-input"
-                  placeholder="e.g. /images/articles/my-post.jpg"
-                  value={form.featuredImage}
-                  onChange={(e) => set("featuredImage", e.target.value)}
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(e.target.files?.[0] ?? null)}
                 />
               </div>
+              {uploadingImage && <p className="admin-page-sub">Uploading image…</p>}
+              {uploadError && <p className="admin-error">{uploadError}</p>}
               {form.featuredImage && (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -343,6 +411,15 @@ export default function PostEditor({ postId }: Props) {
                   className="admin-img-preview"
                 />
               )}
+              <div className="admin-field">
+                <label className="admin-label">Image Alt Text</label>
+                <input
+                  className="admin-input"
+                  placeholder="Describe the image for accessibility and SEO"
+                  value={form.featuredImageAlt}
+                  onChange={(e) => set("featuredImageAlt", e.target.value)}
+                />
+              </div>
             </div>
 
             {/* Save actions */}

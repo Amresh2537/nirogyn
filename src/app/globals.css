@@ -1292,6 +1292,18 @@ section { padding: 7rem 4rem; }
 .blog-hero-inner {
   max-width: 820px; margin: 0 auto;
 }
+.blog-hero-image-wrap {
+  margin-top: 2rem;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1px solid rgba(126,200,90,0.18);
+  box-shadow: 0 18px 50px rgba(17, 38, 24, 0.14);
+}
+.blog-hero-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
 
 /* Tags stagger in */
 .blog-hero-tags {
@@ -1805,16 +1817,6 @@ footer {
   background: rgba(255,255,255,0.04);
 }
 /* Colored bullet dot for READ items */
-.footer-read-dot {
-  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
-}
-/* Science column italic links */
-.footer-links-science a {
-  font-style: italic;
-}
-.footer-science-dash {
-  font-style: normal; color: rgba(249,245,238,0.25); font-size: 0.75rem;
-}
 /* Social media icons */
 .footer-social {
   display: flex; gap: 0.6rem; margin-top: 1.5rem;

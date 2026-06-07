@@ -17,7 +17,7 @@ export async function GET(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const { id } = await params;
-  const post = getPostById(id);
+  const post = await getPostById(id);
   if (!post) return NextResponse.json({ error: "Not found" }, { status: 404 });
   return NextResponse.json(post);
 }
@@ -32,7 +32,7 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await req.json();
-    const post = updatePost(id, body);
+    const post = await updatePost(id, body);
     if (!post) return NextResponse.json({ error: "Not found" }, { status: 404 });
     return NextResponse.json(post);
   } catch {
@@ -48,7 +48,7 @@ export async function DELETE(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const { id } = await params;
-  const ok = deletePost(id);
+  const ok = await deletePost(id);
   if (!ok) return NextResponse.json({ error: "Not found" }, { status: 404 });
   return NextResponse.json({ ok: true });
 }

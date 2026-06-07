@@ -10,11 +10,10 @@ const READ_ITEMS = [
 ];
 
 const SCIENCE_ITEMS = [
-  "Research Library",
-  "The Evidence Base",
-  "Under The Microscope",
-  "Biomarker Lexicon",
-  "Myth vs Science",
+  { label: "Research Library", href: "/science/research-library" },
+  { label: "The Evidence Base", href: "/science/evidence-base" },
+  { label: "Under The Microscope", href: "/science/under-microscope" },
+  { label: "Biomarker Lexicon", href: "/science/biomarker-lexicon" },
 ];
 
 const COMPANY_ITEMS = [
@@ -78,12 +77,9 @@ export default function Footer() {
         <div>
           <div className="footer-col-title">Read</div>
           <ul className="footer-links">
-            {READ_ITEMS.map(({ label, color }) => (
+            {READ_ITEMS.map(({ label }) => (
               <li key={label}>
-                <a href="#">
-                  <span className="footer-read-dot" style={{ background: color }} />
-                  {label}
-                </a>
+                <a href="#">{label}</a>
               </li>
             ))}
           </ul>
@@ -92,13 +88,10 @@ export default function Footer() {
         {/* ── SCIENCE ── */}
         <div>
           <div className="footer-col-title">Science</div>
-          <ul className="footer-links footer-links-science">
+          <ul className="footer-links">
             {SCIENCE_ITEMS.map((item) => (
-              <li key={item}>
-                <a href="#">
-                  <span className="footer-science-dash">—</span>
-                  {item}
-                </a>
+              <li key={item.label}>
+                <Link href={item.href}>{item.label}</Link>
               </li>
             ))}
           </ul>

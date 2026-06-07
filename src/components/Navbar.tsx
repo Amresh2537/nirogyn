@@ -27,6 +27,16 @@ export default function Navbar() {
     { label: "REPRODUCE", href: "#brands" },
   ];
 
+  const topicLinkStyle = {
+    textDecoration: "none",
+    color: navTextColor,
+    fontSize: "1.15rem",
+    fontWeight: 500,
+    letterSpacing: "0.02em",
+    padding: "0 0.65rem",
+    lineHeight: 1,
+  } as const;
+
   return (
     <>
       <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 120 }}>
@@ -38,7 +48,7 @@ export default function Navbar() {
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
         style={{
-          position: "fixed",
+          position: isMobile ? "absolute" : "fixed",
           top: "34px",
           left: 0,
           right: 0,
@@ -58,22 +68,9 @@ export default function Navbar() {
         {isMobile && <div style={{ width: "42px", height: "42px" }} aria-hidden="true" />}
 
         {!isMobile && topics.map((item) => (
-          <div key={item.label} style={{ display: "inline-flex", alignItems: "center" }}>
-            <a
-              href={item.href}
-              style={{
-                textDecoration: "none",
-                color: navTextColor,
-                fontSize: "0.95rem",
-                fontWeight: 500,
-                letterSpacing: "0.02em",
-                padding: "0 0.65rem",
-                lineHeight: 1,
-              }}
-            >
-              {item.label}
-            </a>
-          </div>
+          <a key={item.label} href={item.href} style={topicLinkStyle}>
+            {item.label}
+          </a>
         ))}
       </div>
 

@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
   if (!(await isAuthed(req))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  return NextResponse.json(getAllPosts());
+  return NextResponse.json(await getAllPosts());
 }
 
 export async function POST(req: NextRequest) {
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
   }
   try {
     const body = await req.json();
-    const post = createPost(body);
+    const post = await createPost(body);
     return NextResponse.json(post, { status: 201 });
   } catch {
     return NextResponse.json({ error: "Bad request" }, { status: 400 });

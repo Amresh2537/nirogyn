@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { getPostBySlug, getPublishedPosts } from "@/lib/posts";
+import OptionalImage from "@/components/OptionalImage";
+import { getPostBySlug } from "@/lib/posts";
 
 export const dynamic = "force-dynamic";
 
@@ -13,21 +14,17 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPostBySlug(slug);
   if (!post) return { title: "Post Not Found — Nirogyn" };
   return {
-    title: `${post.title} | Nirogyn`,
-    description: post.excerpt,
+    title: `${post.seoTitle || post.title} | Nirogyn`,
+    description: post.seoDescription || post.excerpt,
   };
-}
-
-export async function generateStaticParams() {
-  return getPublishedPosts().map((p) => ({ slug: p.slug }));
 }
 
 export default async function DynamicBlogPost({ params }: Props) {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPostBySlug(slug);
   if (!post) notFound();
 
   return (
@@ -66,6 +63,18 @@ export default async function DynamicBlogPost({ params }: Props) {
                 })}
               </span>
             </div>
+            {post.featuredImage && (
+              <div className="blog-hero-image-wrap">
+                <OptionalImage
+                  src={post.featuredImage}
+                  alt={post.featuredImageAlt || post.title}
+                  width={1200}
+                  height={675}
+                  className="blog-hero-image"
+                  priority
+                />
+              </div>
+            )}
           </div>
         </header>
 

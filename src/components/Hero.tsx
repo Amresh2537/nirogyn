@@ -46,25 +46,6 @@ export default function Hero() {
 
       {/* ── LEFT CONTENT ── */}
       <div className="hero-content">
-        <div className="hero-actions">
-          <a href="#topics" className="btn-primary">
-            <span>Explore Topics</span>
-            <svg
-              className="arrow-icon"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M7 17L17 7M7 7h10v10"
-              />
-            </svg>
-          </a>
-        </div>
-
         <h1 className="hero-headline">Better Health.Backed by Science.</h1>
         <p className="hero-sub">
           Evidence-based information to help you understand your body, make better choices and live your healthiest life.

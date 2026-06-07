@@ -5,6 +5,8 @@ import { useState } from "react";
 export default function Newsletter() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [message, setMessage] = useState("");
   const [openFaq, setOpenFaq] = useState<number | null>(3);
 
   const FAQS = [
@@ -26,11 +28,31 @@ export default function Newsletter() {
     },
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) return;
-    setSubmitted(true);
-    setEmail("");
+    setSubmitting(true);
+    setMessage("");
+
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Subscribe failed");
+      }
+
+      setSubmitted(true);
+      setEmail("");
+      setMessage("✓ You\'re subscribed! Welcome to Nirogyn.");
+    } catch {
+      setMessage("Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -40,11 +62,6 @@ export default function Newsletter() {
 
           {/* ── LEFT: Headline + features ── */}
           <div className="nl-left">
-            <div className="nl-tag nl-tag-pill">
-              <span className="nl-tag-line" />
-              Stay Informed
-            </div>
-
             <h2 className="nl-headline">
               Stay Informed.<br />
               <em>Stay Healthy.</em>
@@ -90,7 +107,7 @@ export default function Newsletter() {
                 aria-label="Email address"
               />
               <button className="newsletter-btn" type="submit">
-                Subscribe for Free →
+                {submitting ? "Subscribing…" : "Subscribe for Free →"}
               </button>
             </form>
 
@@ -98,7 +115,7 @@ export default function Newsletter() {
               className={`newsletter-success ${submitted ? "show" : ""}`}
               aria-live="polite"
             >
-              ✓ You&apos;re subscribed! Welcome to Nirogyn.
+              {message}
             </p>
 
             <p className="nl-privacy">

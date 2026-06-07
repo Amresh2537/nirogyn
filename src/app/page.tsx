@@ -10,6 +10,8 @@ import Newsletter from "@/components/Newsletter";
 import Footer from "@/components/Footer";
 import WellnessChat from "@/components/WellnessChat";
 
+export const dynamic = "force-dynamic";
+
 export default function Home() {
   return (
     <>

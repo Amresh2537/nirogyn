@@ -12,8 +12,8 @@ export const metadata: Metadata = {
     "Evidence-based wellness articles on gut health, nutrition, sleep, stress, and more — built for India.",
 };
 
-export default function BlogPage() {
-  const posts = getPublishedPosts();
+export default async function BlogPage() {
+  const posts = await getPublishedPosts();
 
   return (
     <>
@@ -45,7 +45,7 @@ export default function BlogPage() {
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={post.featuredImage}
-                        alt={post.title}
+                        alt={post.featuredImageAlt || post.title}
                         className="blog-listing-card-img"
                       />
                     )}

@@ -25,7 +25,7 @@ const MINI_ARTICLES = [
 
 export default async function Articles() {
   // Load CMS posts (published) and merge with static mini articles
-  const cmsPosts = getPublishedPosts().slice(0, 4);
+  const cmsPosts = (await getPublishedPosts()).slice(0, 4);
   const cmsHrefs = new Set(cmsPosts.map((p) => `/blog/${p.slug}`));
 
   // Filter static articles that aren't already represented by CMS posts
@@ -45,9 +45,9 @@ export default async function Articles() {
           <div className="section-tag reveal">Latest</div>
           <h2 className="section-title reveal reveal-delay-1">From Our Blog</h2>
         </div>
-        <a href="/blog" className="btn-ghost reveal">
+        <Link href="/blog" className="btn-ghost reveal">
           View All Articles ↗
-        </a>
+        </Link>
       </div>
 
       <div className="articles-grid">
@@ -93,7 +93,7 @@ export default async function Articles() {
                 {post.featuredImage && (
                   <OptionalImage
                     src={post.featuredImage}
-                    alt={post.title}
+                    alt={post.featuredImageAlt || post.title}
                     fill
                     sizes="60px"
                   />

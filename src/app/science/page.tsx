@@ -1,4 +1,4 @@
-import Navbar from "@/components/Navbar";
+import Navbar from "@/app/science/Navbar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import ScienceGrid from "@/components/ScienceGrid";

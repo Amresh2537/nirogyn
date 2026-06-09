@@ -1,4 +1,4 @@
-import Navbar from "@/components/Navbar";
+import Navbar from "@/app/Navbar";
 import Hero from "@/components/Hero";
 import FourPillars from "@/components/FourPillars";
 import TrustBar from "@/components/TrustBar";

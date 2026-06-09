@@ -34,7 +34,9 @@ export default function AskPage() {
             placeholder="Use @ to add products or ask a question"
             aria-label="Ask question"
           />
-          <button className="ask-send" type="button" aria-label="Send">➤</button>
+          <button className="ask-send" type="button" aria-label="Send">
+            ➤
+          </button>
         </div>
         <p className="ask-note">
           Helix is AI-generated and may contain mistakes. This is not medical advice and should not replace professional guidance.

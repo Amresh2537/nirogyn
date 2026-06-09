@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/app/faq/Navbar";
 import Footer from "@/components/Footer";
 import type { Metadata } from "next";
 

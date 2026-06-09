@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/app/blog/Navbar";
 import Footer from "@/components/Footer";
 import OptionalImage from "@/components/OptionalImage";
 import { getPostBySlug } from "@/lib/posts";

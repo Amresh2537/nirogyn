@@ -1,29 +1,60 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Marquee from "./Marquee";
 
 export default function Navbar() {
+  const marqueeHeight = 34;
+  const navGap = 2;
+  const navTop = marqueeHeight + navGap;
   const [isHovering, setIsHovering] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const navTextColor = isHovering ? "#1a3c1e" : "#ffffff";
+  const [isVisible, setIsVisible] = useState(true);
+  const lastScrollYRef = useRef(0);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 900px)");
 
-    const syncMobileState = () => setIsMobile(mediaQuery.matches);
+    const syncMobileState = () => {
+      const mobile = mediaQuery.matches;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setIsMenuOpen(false);
+      }
+    };
     syncMobileState();
     mediaQuery.addEventListener("change", syncMobileState);
 
     return () => mediaQuery.removeEventListener("change", syncMobileState);
   }, []);
 
+  // Hide navbar on scroll down, show it on scroll up.
   useEffect(() => {
-    if (!isMobile) {
-      setIsMenuOpen(false);
-    }
+    const controlNavbar = () => {
+      const currentScrollY = window.scrollY;
+
+      if (isMobile) {
+        setIsVisible(true);
+        lastScrollYRef.current = currentScrollY;
+        return;
+      }
+
+      if (currentScrollY <= marqueeHeight + 4) {
+        setIsVisible(true);
+      } else if (currentScrollY > lastScrollYRef.current) {
+        setIsVisible(false);
+        setIsMenuOpen(false);
+      } else {
+        setIsVisible(true);
+      }
+
+      lastScrollYRef.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", controlNavbar, { passive: true });
+    return () => window.removeEventListener("scroll", controlNavbar);
   }, [isMobile]);
 
   const topics = [
@@ -34,181 +65,243 @@ export default function Navbar() {
     { label: "REPRODUCE", href: "#brands" },
   ];
 
-  const topicLinkStyle = {
-    textDecoration: "none",
-    color: navTextColor,
-    fontSize: "1.15rem",
-    fontWeight: 500,
-    letterSpacing: "0.02em",
-    padding: "0 0.65rem",
-    lineHeight: 1,
-  } as const;
+  const useLightNav = isHovering;
 
   return (
     <>
-      <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 120 }}>
+      {/* Marquee - always visible */}
+      <div className="fixed top-0 left-0 right-0 z-[130]">
         <Marquee />
       </div>
 
+      {/* Navbar - hides on scroll down, shows on scroll up */}
       <nav
         id="mainNav"
-        onMouseEnter={() => setIsHovering(true)}
+        onMouseEnter={() => {
+          setIsHovering(true);
+          setIsVisible(true);
+        }}
         onMouseLeave={() => setIsHovering(false)}
+        onFocusCapture={() => setIsVisible(true)}
+        className={`
+          fixed left-0 right-0 z-[129] grid items-center 
+          ${isMobile ? "gap-1.5 px-2 py-2" : "gap-3 px-7 py-4"}
+          transition-[transform,opacity,background-color,border-color,backdrop-filter] duration-300 ease-in-out
+          ${isVisible ? "opacity-100" : "opacity-0 pointer-events-none"}
+          ${isMobile ? "grid-cols-[40px_minmax(0,1fr)_40px]" : "grid-cols-[1fr_auto_1fr]"}
+          ${useLightNav
+            ? "border-b border-[rgba(16,63,34,0.08)] bg-[#f7f8f7] backdrop-blur-[6px]" 
+            : "border-b border-transparent !bg-transparent backdrop-blur-0"
+          }
+        `}
         style={{
-          position: isMobile ? "absolute" : "fixed",
-          top: "34px",
-          left: 0,
-          right: 0,
-          zIndex: 119,
-          display: "grid",
-          gridTemplateColumns: isMobile ? "42px 1fr 42px" : "1fr auto 1fr",
-          alignItems: "center",
-          gap: "0.5rem",
-          padding: "0.75rem 1.15rem",
-          background: isHovering ? "#f7f8f7" : "transparent",
-          borderBottom: isHovering ? "1px solid rgba(16,63,34,0.08)" : "1px solid transparent",
-          backdropFilter: isHovering ? "blur(6px)" : "none",
-          transition: "background 0.25s ease, border-color 0.25s ease, backdrop-filter 0.25s ease",
+          top: isMobile ? marqueeHeight + 4 : navTop,
+          transform: isVisible ? "translateY(0)" : `translateY(calc(-100% - ${navTop}px))`,
         }}
       >
-      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", justifySelf: "start" }}>
-        {isMobile ? (
+        {/* Left section */}
+        <div className={`flex items-center justify-self-start ${isMobile ? "gap-1.5" : "gap-6"}`}>
           <button
             type="button"
-            className={`nav-menu-btn ${isMenuOpen ? "nav-menu-btn--open" : ""}`}
+            className={`inline-flex h-[40px] w-[40px] flex-col items-center justify-center gap-1 rounded-lg border transition-colors duration-200 ${
+              isMobile
+                ? "border-[rgba(255,255,255,0.4)] bg-[rgba(8,14,10,0.28)]"
+                : useLightNav
+                  ? "border-[rgba(16,63,34,0.22)] bg-[rgba(255,255,255,0.86)]"
+                  : "border-[rgba(255,255,255,0.4)] bg-[rgba(8,14,10,0.28)]"
+            }`}
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMenuOpen}
             aria-controls="mobileNavMenu"
             onClick={() => setIsMenuOpen((open) => !open)}
           >
-            <span />
-            <span />
-            <span />
+            <span
+              className={`h-[1.8px] w-[18px] rounded-[1px] transition-all duration-200 ${
+                useLightNav ? "bg-[rgba(31,53,36,0.92)]" : "bg-[rgba(255,255,255,0.92)]"
+              } ${isMenuOpen ? "translate-y-[5.7px] rotate-45" : ""}`}
+            />
+            <span
+              className={`h-[1.8px] w-[18px] rounded-[1px] transition-all duration-200 ${
+                useLightNav ? "bg-[rgba(31,53,36,0.92)]" : "bg-[rgba(255,255,255,0.92)]"
+              } ${isMenuOpen ? "opacity-0" : "opacity-100"}`}
+            />
+            <span
+              className={`h-[1.8px] w-[18px] rounded-[1px] transition-all duration-200 ${
+                useLightNav ? "bg-[rgba(31,53,36,0.92)]" : "bg-[rgba(255,255,255,0.92)]"
+              } ${isMenuOpen ? "-translate-y-[5.7px] -rotate-45" : ""}`}
+            />
           </button>
-        ) : null}
 
-        {!isMobile && topics.map((item) => (
-          <a key={item.label} href={item.href} style={topicLinkStyle}>
-            {item.label}
+          {isMobile ? null : topics.map((item) => (
+            <a
+              key={item.label}
+              href={item.href}
+              className={`no-underline px-3 py-1 text-[1.36rem]  tracking-[0.02em] leading-none ${
+                useLightNav ? "text-[#1a3c1e]" : "text-white"
+              }`}
+            >
+              {item.label}
+            </a>
+          ))}
+        </div>
+
+        {/* Logo */}
+        <Link
+          href="/"
+          className={`justify-self-center font-bold leading-none tracking-[0.02em] no-underline font-['Playfair_Display',serif] ${
+            isMobile ? "text-[1.65rem] text-center" : "text-[2.55rem]"
+          } ${useLightNav ? "text-[#1a3c1e]" : "text-white"}`}
+        >
+          NIROGYN
+        </Link>
+
+        {/* Right section */}
+        <div className={`flex items-center justify-self-end ${isMobile ? "gap-2" : "gap-5"}`}>
+          {!isMobile && (
+            <>
+              <form
+                action="#articles"
+                className={`flex items-center gap-0 h-[clamp(45px,3.5vw,32px)] w-[clamp(250px,20vw,360px)] rounded-full overflow-hidden ${
+                  isHovering 
+                    ? "border-2 border-[rgba(16,63,34,0.8)] bg-white" 
+                    : "border-2 border-[rgba(255,255,255,0.78)] bg-black/20"
+                }`}
+              >
+                <input
+                  type="search"
+                  name="q"
+                  placeholder="Search"
+                  aria-label="Search"
+                  className={`w-full h-full border-none bg-transparent outline-none text-center placeholder:text-center text-[0.9rem] font-medium px-5 ${
+                    useLightNav ? "text-black placeholder:text-black/70" : "text-white placeholder:text-white/70"
+                  }`}
+                />
+                <button
+                  type="submit"
+                  aria-label="Search"
+                  className={`w-[54px] h-full border-none bg-transparent text-[1.6rem] font-medium cursor-pointer ${
+                    useLightNav ? "text-[#1a3c1e]" : "text-white"
+                  }`}
+                >
+                  ⌕
+                </button>
+              </form>
+
+              <Link
+                href="/ask"
+                className={`min-w-[clamp(118px,11vw,164px)] h-[clamp(44px,3.5vw,42px)] rounded-full border-2 border-transparent px-[clamp(16px,1.7vw,27px)] text-[clamp(0.86rem,0.88vw,0.95rem)] font-semibold no-underline inline-flex items-center justify-center whitespace-nowrap cursor-pointer ${
+                  isHovering 
+                    ? "bg-[#f7f8f7] text-[#1f5a2a]" 
+                    : "bg-gradient-to-r from-[#245c2f] to-[#3f874a] text-[#b8f4a2]"
+                }`}
+              >
+                ✦ Ask Niro
+              </Link>
+            </>
+          )}
+          {isMobile && <div className="h-[40px] w-[40px]" aria-hidden="true" />}
+        </div>
+
+  {/* Mobile Menu */}
+{isMenuOpen && (
+  <div
+    id="mobileNavMenu"
+    className="
+      absolute
+      left-0
+      right-0
+      top-full
+      bg-white
+      border-t
+      border-black/10
+      shadow-2xl
+      z-[220]
+      overflow-hidden
+    "
+  >
+    <div className="py-6">
+      {/* Navigation Items */}
+      <div className="flex flex-col">
+        {topics.map((item) => (
+          <a
+            key={item.label}
+            href={item.href}
+            onClick={() => setIsMenuOpen(false)}
+            className="
+              group
+              flex
+              items-center
+              justify-between
+              h-20
+              px-8
+              border-b
+              border-black/10
+              no-underline
+              transition-all
+              duration-300
+              hover:bg-black/5
+            "
+          >
+            <span
+              className="
+                text-[1.45rem]
+                font-medium
+                tracking-[0.04em]
+                text-black
+                transition-transform
+                duration-300
+                group-hover:translate-x-2
+              "
+            >
+              {item.label}
+            </span>
+
+            <span
+              className="
+                text-xl
+                text-black/70
+                transition-transform
+                duration-300
+                group-hover:translate-x-2
+              "
+            >
+              →
+            </span>
           </a>
         ))}
       </div>
 
-      <Link
-        href="/"
-        style={{
-          textDecoration: "none",
-          justifySelf: "center",
-          fontFamily: "var(--font-playfair), 'Playfair Display', serif",
-          fontSize: isMobile ? "2rem" : "2.3rem",
-          fontWeight: 700,
-          letterSpacing: "0.02em",
-          color: navTextColor,
-          lineHeight: 1,
-        }}
-      >
-        NIROGYN
-      </Link>
-
-      <div style={{ display: "flex", gap: "0.75rem", alignItems: "center", justifySelf: "end" }}>
-        {!isMobile && (
-          <>
-        <form
-          action="#articles"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 0,
-            height: "54px",
-            width: "clamp(250px, 20vw, 340px)",
-            borderRadius: "999px",
-            border: `2px solid ${isHovering ? "rgba(16,63,34,0.8)" : "rgba(255,255,255,0.78)"}`,
-            background: isHovering ? "#fff" : "rgba(5,5,5,0.24)",
-            overflow: "hidden",
-          }}
-        >
-          <input
-            type="search"
-            name="q"
-            placeholder="Search all products"
-            aria-label="Search all products"
-            style={{
-              width: "100%",
-              height: "100%",
-              border: "none",
-              background: "transparent",
-              color: navTextColor,
-              padding: "0 1.3rem",
-              outline: "none",
-              fontSize: "1.05rem",
-              fontWeight: 500,
-            }}
-          />
-          <button
-            type="submit"
-            aria-label="Search"
-            style={{
-              width: "56px",
-              height: "100%",
-              border: "none",
-              background: "transparent",
-              color: navTextColor,
-              fontSize: "1.45rem",
-              fontWeight: 500,
-              cursor: "pointer",
-            }}
-          >
-            ⌕
-          </button>
-        </form>
-
+      {/* CTA Section */}
+      <div className="mx-auto mt-8 flex max-w-[420px] flex-col gap-4 px-6">
         <Link
-          href="/ask"
-          style={{
-            height: "54px",
-            borderRadius: "999px",
-            border: "2px solid transparent",
-            background:
-              `${isHovering ? "linear-gradient(#f7f8f7, #f7f8f7)" : "linear-gradient(rgba(8,14,10,0.2), rgba(8,14,10,0.2))"} padding-box, linear-gradient(90deg, #245c2f 0%, #3f874a 100%) border-box`,
-            color: isHovering ? "#1f5a2a" : "#b8f4a2",
-            padding: "0 1.4rem",
-            fontSize: "1.05rem",
-            fontWeight: 600,
-            textDecoration: "none",
-            display: "inline-flex",
-            alignItems: "center",
-            cursor: "pointer",
-          }}
+          href="/blog"
+          onClick={() => setIsMenuOpen(false)}
+          className="
+            flex
+            h-14
+            w-full
+            items-center
+            justify-center
+            rounded-full
+            border
+            border-black/20
+            text-base
+            font-medium
+            text-black
+            no-underline
+            transition-all
+            duration-300
+            hover:bg-black/5
+          "
         >
-          ✦ Ask Niro
+          View Articles
         </Link>
-          </>
-        )}
-        {isMobile && <div className="nav-right-spacer" aria-hidden="true" />}
-      </div>
 
-      {isMobile && isMenuOpen && (
-        <div className="nav-mobile-menu" id="mobileNavMenu">
-          <div className="nav-mobile-menu-grid">
-            {topics.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="nav-mobile-link"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {item.label}
-              </a>
-            ))}
-            <Link href="/blog" className="nav-mobile-action" onClick={() => setIsMenuOpen(false)}>
-              View Articles
-            </Link>
-            <Link href="/ask" className="nav-mobile-action nav-mobile-action--primary" onClick={() => setIsMenuOpen(false)}>
-              Ask Niro
-            </Link>
-          </div>
-        </div>
-      )}
+        
+      </div>
+    </div>
+  </div>
+)}
       </nav>
     </>
   );

@@ -19,8 +19,8 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
-        <Marquee />
         <FourPillars />
+        <Marquee />
         <Topics />
         <TrustBar />
         <Articles />

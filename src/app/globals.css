@@ -1976,9 +1976,9 @@ footer {
 /* FOUR PILLARS */
 .pillars-section {
   background: #02120a;
-  padding: 8.5rem 0 6.8rem;
+  padding: 4rem 0;
   margin-top: -1.2rem;
-  border-radius: 20px;
+  border-radius: 20px 20px 0 0;
   overflow: hidden;
   position: relative;
   z-index: 4;
@@ -1996,6 +1996,7 @@ footer {
   color: #f6f7f6;
   font-weight: 300;
   letter-spacing: 0.006em;
+  margin: 0;
 }
 .pillars-copy {
   justify-self: end;
@@ -2005,6 +2006,7 @@ footer {
   color: rgba(255,255,255,0.92);
   text-align: right;
   font-weight: 300;
+  margin: 0;
 }
 
 @media (max-width: 900px) {
@@ -2023,9 +2025,9 @@ footer {
   }
   .hero-visual { display: none; }
   .pillars-section {
-    padding: 4.5rem 0 3.8rem;
+    padding: 2.75rem 0;
     margin-top: -0.9rem;
-    border-radius: 20px;
+    border-radius: 20px 20px 0 0;
   }
   .pillars-inner {
     grid-template-columns: 1fr;

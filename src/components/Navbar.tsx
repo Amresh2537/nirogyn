@@ -197,7 +197,7 @@ export default function Navbar() {
                         padding: "11px 18px",
                         color: "#1a3c1e",
                         fontSize: "0.88rem",
-                        fontWeight: 500,
+                        fontWeight: 400,
                         letterSpacing: "0.06em",
                         borderBottom: "0.5px solid rgba(16,63,34,0.06)",
                       }}
@@ -246,7 +246,7 @@ export default function Navbar() {
                 <a
                   key={item.label}
                   href={item.href}
-                  className={`no-underline px-3 py-1 text-[1.36rem] tracking-[0.02em] leading-none ${
+                  className={`no-underline px-3 py-1 text-[1.36rem] tracking-[0.02em] leading-none font-normal ${
                     useLightNav ? "text-[#1a3c1e]" : "text-white"
                   }`}
                 >

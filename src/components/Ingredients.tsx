@@ -13,7 +13,7 @@ export default function Ingredients() {
       <div className="ingredients-inner">
         <div className="ingredients-header-row">
           <div>
-            <h2 className="ingredients-title">Science-Backed Ingredients</h2>
+            <h2 className="ingredients-title">Learn about Super Ingredients</h2>
             <p className="ingredients-subtitle">
               Learn about key ingredients, their benefits, dosage, sources and side effects.
             </p>

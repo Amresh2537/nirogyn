@@ -1,6 +1,7 @@
 import Navbar from "@/app/Navbar";
 import Hero from "@/components/Hero";
 import FourPillars from "@/components/FourPillars";
+import Marquee from "@/components/Marquee";
 import TrustBar from "@/components/TrustBar";
 import Topics from "@/components/Topics";
 import Ingredients from "@/components/Ingredients";
@@ -18,6 +19,7 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
+        <Marquee />
         <FourPillars />
         <Topics />
         <TrustBar />

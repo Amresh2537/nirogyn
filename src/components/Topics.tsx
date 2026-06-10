@@ -1,71 +1,218 @@
+"use client";
+import { ArrowUpRight } from "lucide-react";
+import { useState } from "react";
+
 const TOPIC_CARDS = [
-  {
-    num: "01",
-    title: "Gut Health",
-    desc: "Digestion, bloating, constipation & more",
-  },
-  {
-    num: "02",
-    title: "Skin Health",
-    desc: "Acne, glow, aging & skin nutrition",
-  },
-  {
-    num: "03",
-    title: "Kids Health",
-    desc: "Growth, immunity, nutrition & more",
-  },
-  {
-    num: "04",
-    title: "Men's Health",
-    desc: "Energy, hormones, stress & performance",
-  },
-  {
-    num: "05",
-    title: "Energy & Vitality",
-    desc: "Fatigue, stamina, focus & productivity",
-  },
-  {
-    num: "06",
-    title: "Sleep & Stress",
-    desc: "Better sleep, less stress, more calm",
-  },
+  { num: "01", title: "Gut Health", desc: "Digestion, bloating, constipation & more", tag: "Digestive Care" },
+  { num: "02", title: "Skin Health", desc: "Acne, glow, aging & skin nutrition", tag: "Dermatology" },
+  { num: "03", title: "Kids Health", desc: "Growth, immunity, nutrition & more", tag: "Paediatrics" },
+  { num: "04", title: "Men's Health", desc: "Energy, hormones, stress & performance", tag: "Men's Care" },
+  { num: "05", title: "Energy & Vitality", desc: "Fatigue, stamina, focus & productivity", tag: "Performance" },
+  { num: "06", title: "Sleep & Stress", desc: "Better sleep, less stress, more calm", tag: "Wellness" },
 ];
+
+type TopicCardItem = (typeof TOPIC_CARDS)[number];
+
+function TopicCard({ topic }: { topic: TopicCardItem }) {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <article
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        background: "#fff",
+        padding: "1.75rem 2rem",
+        cursor: "pointer",
+        minHeight: "160px",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+      }}
+    >
+      {/* Left-to-right fill */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "#103f22",
+          transform: hovered ? "translateX(0%)" : "translateX(-100%)",
+          transition: "transform 0.55s cubic-bezier(0.77, 0, 0.175, 1)",
+          zIndex: 0,
+        }}
+      />
+
+      {/* Content */}
+      <div style={{ position: "relative", zIndex: 1 }}>
+        {/* Tag + Number */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
+          <span
+            style={{
+              fontSize: "10px",
+              fontWeight: 700,
+              letterSpacing: "0.13em",
+              textTransform: "uppercase",
+              color: hovered ? "rgba(255,255,255,0.45)" : "#4a7055",
+              transition: "color 0.5s",
+            }}
+          >
+            {topic.tag}
+          </span>
+          <span
+            style={{
+              fontSize: "11px",
+              fontWeight: 500,
+              color: hovered ? "rgba(255,255,255,0.25)" : "#c2d4c4",
+              transition: "color 0.5s",
+              letterSpacing: "0.05em",
+            }}
+          >
+            {topic.num}
+          </span>
+        </div>
+
+        {/* Title */}
+        <h3
+          style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: "clamp(1.4rem, 2vw, 1.85rem)",
+            fontWeight: 500,
+            lineHeight: 1.15,
+            color: hovered ? "#ffffff" : "#103f22",
+            margin: "0 0 0.6rem",
+            transition: "color 0.5s",
+          }}
+        >
+          {topic.title}
+        </h3>
+
+        {/* Desc */}
+        <p
+          style={{
+            fontSize: "14px",
+            lineHeight: 1.6,
+            color: hovered ? "rgba(255,255,255,0.5)" : "#7a8e7c",
+            margin: 0,
+            transition: "color 0.5s",
+          }}
+        >
+          {topic.desc}
+        </p>
+      </div>
+
+      {/* Bottom arrow */}
+      <div
+        style={{
+          position: "relative",
+          zIndex: 1,
+          marginTop: "1.25rem",
+          display: "flex",
+          justifyContent: "flex-end",
+        }}
+      >
+        <div
+          style={{
+            width: "34px",
+            height: "34px",
+            borderRadius: "50%",
+            background: hovered ? "rgba(255,255,255,0.12)" : "#edf4ee",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            transform: hovered ? "translate(2px, -2px)" : "translate(0,0)",
+            transition: "background 0.5s, transform 0.4s",
+          }}
+        >
+          <ArrowUpRight
+            size={15}
+            style={{
+              color: hovered ? "#a8d5b2" : "#2b5e38",
+              transition: "color 0.5s",
+            }}
+          />
+        </div>
+      </div>
+    </article>
+  );
+}
 
 export default function Topics() {
   return (
     <section
-      className="relative overflow-hidden bg-[radial-gradient(circle_at_16%_9%,#f3f8ed_0%,#f8f8f4_56%,#f3f6ef_100%)] px-4 pb-10 pt-20 sm:px-6 lg:px-10"
       id="topics"
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        background: "#f6f9f5",
+        padding: "6rem 2.5rem",
+      }}
     >
-      <div className="mx-auto w-full max-w-[1400px]">
-        <div className="mb-5">
-          <h2 className="font-[var(--font-playfair)] text-[clamp(2.1rem,4.1vw,4.35rem)] font-medium leading-[1.02] text-[#103f22]">
-            Health Topics That
-            <br />
-            Matter Most
-          </h2>
-          <p className="mt-4 max-w-[560px] text-[1.04rem] leading-[1.5] text-[#5f6f61]">
-            Dive into expert guides on the topics most important to you and your
-            family.
+      {/* Subtle bg glow */}
+      <div
+        style={{
+          pointerEvents: "none",
+          position: "absolute",
+          inset: 0,
+          background: "radial-gradient(ellipse 55% 45% at 8% 5%, rgba(43,94,56,0.07), transparent)",
+        }}
+      />
+
+      <div style={{ position: "relative", maxWidth: "1400px", margin: "0 auto" }}>
+        {/* Header */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "flex-end",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: "2rem",
+            marginBottom: "2.5rem",
+          }}
+        >
+          <div>
+            <h2
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: "clamp(2.2rem, 4vw, 4.4rem)",
+                fontWeight: 500,
+                lineHeight: 1.02,
+                color: "#103f22",
+                margin: 0,
+              }}
+            >
+              Health matters
+              <br />
+              <em style={{ fontStyle: "italic", color: "#2b5e38" }}>that matter most</em>
+            </h2>
+          </div>
+          <p
+            style={{
+              maxWidth: "320px",
+              fontSize: "15px",
+              lineHeight: 1.7,
+              color: "#627264",
+              margin: 0,
+              textAlign: "right",
+            }}
+          >
+            Expert-backed insights, wellness guides, and practical health advice for every stage of life.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {/* Grid — 1px green lines as gaps */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: "1px",
+            background: "#d8e6d9",
+          }}
+        >
           {TOPIC_CARDS.map((topic) => (
-            <article
-              className="group relative min-h-[210px] overflow-hidden rounded-3xl border border-[#edf1eb] bg-[#f4f7f2] px-7 pb-6 pt-6 shadow-[0_10px_24px_rgba(25,45,24,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-[#2b6a3b] hover:bg-[#123f24] hover:shadow-[0_18px_36px_rgba(12,30,14,0.24)]"
-              key={topic.title}
-            >
-              <h3 className="text-[clamp(1.35rem,1.7vw,1.95rem)] font-semibold leading-[1.15] text-[#103f22] transition-colors duration-300 group-hover:text-[#f4fbef]">
-                {topic.title}
-              </h3>
-              <p className="mt-2 max-w-[320px] text-[0.95rem] leading-[1.4] text-[#566a5a] transition-colors duration-300 group-hover:text-[#f4fbef]">
-                {topic.desc}
-              </p>
-              <span className="pointer-events-none absolute bottom-[-0.6rem] right-5 font-[var(--font-playfair)] text-[clamp(4.4rem,7vw,7.8rem)] font-extrabold leading-none text-[rgba(15,30,15,0.06)] transition-colors duration-300 group-hover:text-[rgba(244,251,239,0.16)]">
-                {topic.num}
-              </span>
-            </article>
+            <TopicCard key={topic.title} topic={topic} />
           ))}
         </div>
       </div>

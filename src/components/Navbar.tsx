@@ -12,6 +12,7 @@ export default function Navbar() {
   const [isMobile, setIsMobile] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
   const lastScrollYRef = useRef(0);
 
   useEffect(() => {
@@ -34,6 +35,9 @@ export default function Navbar() {
   useEffect(() => {
     const controlNavbar = () => {
       const currentScrollY = window.scrollY;
+      const hasScrolledPastHero = currentScrollY > marqueeHeight + 4;
+
+      setIsScrolled(hasScrolledPastHero);
 
       if (isMobile) {
         setIsVisible(true);
@@ -65,7 +69,7 @@ export default function Navbar() {
     { label: "REPRODUCE", href: "#brands" },
   ];
 
-  const useLightNav = isHovering;
+  const useLightNav = isHovering || isScrolled || isMenuOpen;
 
   return (
     <>
@@ -162,7 +166,7 @@ export default function Navbar() {
               <form
                 action="#articles"
                 className={`flex items-center gap-0 h-[clamp(45px,3.5vw,32px)] w-[clamp(250px,20vw,360px)] rounded-full overflow-hidden ${
-                  isHovering 
+                  useLightNav
                     ? "border-2 border-[rgba(16,63,34,0.8)] bg-white" 
                     : "border-2 border-[rgba(255,255,255,0.78)] bg-black/20"
                 }`}
@@ -190,7 +194,7 @@ export default function Navbar() {
               <Link
                 href="/ask"
                 className={`min-w-[clamp(118px,11vw,164px)] h-[clamp(44px,3.5vw,42px)] rounded-full border-2 border-transparent px-[clamp(16px,1.7vw,27px)] text-[clamp(0.86rem,0.88vw,0.95rem)] font-semibold no-underline inline-flex items-center justify-center whitespace-nowrap cursor-pointer ${
-                  isHovering 
+                  useLightNav
                     ? "bg-[#f7f8f7] text-[#1f5a2a]" 
                     : "bg-gradient-to-r from-[#245c2f] to-[#3f874a] text-[#b8f4a2]"
                 }`}

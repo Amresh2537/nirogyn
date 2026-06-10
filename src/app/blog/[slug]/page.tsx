@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import Navbar from "@/app/blog/Navbar";
-import Footer from "@/components/Footer";
 import OptionalImage from "@/components/OptionalImage";
 import { getPostBySlug } from "@/lib/posts";
+import styles from "../blog-pages.module.css";
 
 export const dynamic = "force-dynamic";
 
@@ -27,108 +27,147 @@ export default async function DynamicBlogPost({ params }: Props) {
   if (!post) notFound();
 
   return (
-    <>
-      <Navbar />
-      <div className="min-h-screen bg-[#f2f0eb]">
+    <div className={styles.postPage}>
+      <header className={styles.postTopNav}>
+        <div className={styles.navInner}>
+          <Link href="/blog" className={styles.navBackLink}>
+            ← Back to all articles
+          </Link>
+          <span className={styles.navLabel}>
+            Article
+          </span>
+          <div className={styles.navSpacer} />
+        </div>
+      </header>
+
+      <main>
+        <section className={styles.postHero}>
+          <div className={styles.heroGlow} aria-hidden="true" />
+          <div className={styles.postHeroInner}>
+            <div className={styles.postMeta}>
+              <time dateTime={post.createdAt}>
+                {new Date(post.createdAt).toLocaleDateString("en-IN", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })}
+              </time>
+              {post.category && (
+                <>
+                  <span className={styles.metaDot}>·</span>
+                  <span>{post.category}</span>
+                </>
+              )}
+              {post.readTime && (
+                <>
+                  <span className={styles.metaDot}>·</span>
+                  <span>{post.readTime}</span>
+                </>
+              )}
+            </div>
+
+            <h1 className={styles.postTitle}>
+              {post.title}
+            </h1>
+
+            {post.excerpt && (
+              <p className={styles.postExcerpt}>
+                {post.excerpt}
+              </p>
+            )}
+          </div>
+        </section>
+
         {post.featuredImage && (
-          <div className="relative h-[clamp(300px,45vw,580px)] w-full overflow-hidden">
+          <div className={styles.featuredWrap}>
             <OptionalImage
               src={post.featuredImage}
               alt={post.featuredImageAlt || post.title}
               width={1400}
               height={600}
-              className="h-full w-full object-cover"
+              className={styles.featuredImage}
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-[rgba(0,0,0,0.12)] to-[rgba(0,0,0,0.52)]" />
           </div>
         )}
 
-        <div className="relative z-[2] mx-auto mt-[-72px] max-w-[860px] px-6 max-sm:mt-[-48px]">
-          <div className="bg-[#f2f0eb] px-10 pb-8 pt-9 max-sm:px-5 max-sm:py-6">
-            <div className="mb-4 flex items-center gap-2.5">
-              <span className="text-[11px] font-semibold tracking-[0.1em] text-[#7a6e60]">
-                {new Date(post.createdAt)
-                  .toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })
-                  .toUpperCase()}
-              </span>
-              {post.category && (
-                <>
-                  <span className="h-1 w-1 shrink-0 rounded-full bg-[#7a6e60]" />
-                  <span className="text-[11px] font-semibold tracking-[0.1em] text-[#7a6e60]">
-                    {post.category.toUpperCase()}
-                  </span>
-                </>
-              )}
-            </div>
-
-            <h1
-              className="mb-[18px] font-['Josefin_Sans',sans-serif] text-[clamp(1.6rem,3vw,2.4rem)] font-semibold uppercase leading-[1.3] tracking-[0.06em] text-[#1a2218]"
-            >
-              {post.title}
-            </h1>
-
-            {post.excerpt && (
-              <p className="m-0 max-w-[640px] text-[0.95rem] leading-[1.75] text-[#4a4a42]">
-                {post.excerpt}
-              </p>
-            )}
-          </div>
-        </div>
-
-        <article className="mx-auto max-w-[860px] px-16 pb-12 pt-8 max-sm:px-5">
+        <article className={styles.postBodySection}>
           <div
-            className="text-[0.95rem] leading-[1.8] text-[#3a3a32] [&_a]:text-[#3f874a] [&_h2]:mt-8 [&_h2]:font-['Josefin_Sans',sans-serif] [&_h2]:text-[1.1rem] [&_h2]:uppercase [&_h2]:tracking-[0.05em] [&_h2]:text-[#1a2218] [&_h2]:mb-3 [&_p]:mb-[1.2rem]"
+            className={styles.bodyProse}
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
         </article>
 
-        <section className="mx-auto max-w-[860px] border-t border-[rgba(26,34,24,0.15)] px-16 pb-16 pt-10 max-sm:px-5">
-          <h2 className="mb-5 font-['Josefin_Sans',sans-serif] text-[11px] font-semibold uppercase tracking-[0.12em] text-[#1a2218]">
-            Leave a comment
-          </h2>
-          <form className="flex flex-col gap-3.5" action="#" method="post">
-            <div className="flex gap-3.5 max-sm:flex-col">
-              <input
-                className="flex-1 rounded-[2px] border border-[rgba(26,34,24,0.22)] bg-white px-4 py-[11px] text-[0.88rem] text-[#1a2218] outline-none focus:border-[rgba(26,34,24,0.55)]"
-                type="text"
-                name="name"
-                placeholder="Name"
-                required
-              />
-              <input
-                className="flex-1 rounded-[2px] border border-[rgba(26,34,24,0.22)] bg-white px-4 py-[11px] text-[0.88rem] text-[#1a2218] outline-none focus:border-[rgba(26,34,24,0.55)]"
-                type="email"
-                name="email"
-                placeholder="Email"
-                required
-              />
-            </div>
-            <textarea
-              className="resize-y rounded-[2px] border border-[rgba(26,34,24,0.22)] bg-white px-4 py-[11px] text-[0.88rem] text-[#1a2218] outline-none focus:border-[rgba(26,34,24,0.55)]"
-              name="comment"
-              placeholder="Share your thoughts..."
-              rows={4}
-              required
-            />
-            <button
-              className="w-fit rounded-[2px] bg-[#1a2218] px-8 py-3 font-['Josefin_Sans',sans-serif] text-[11px] font-semibold uppercase tracking-[0.1em] text-[#b8f4a2]"
-              type="submit"
-            >
-              Post comment
-            </button>
-          </form>
+        <section className={styles.commentsSection}>
+          <div className={styles.commentsCard}>
+            <h2 className={styles.commentsTitle}>
+              Leave a comment
+            </h2>
+            <form className={styles.commentsForm} action="#" method="post">
+              <div className={styles.commentsGrid}>
+                <div>
+                  <label htmlFor="name" className={styles.inputLabel}>
+                    Name *
+                  </label>
+                  <input
+                    id="name"
+                    type="text"
+                    name="name"
+                    placeholder="Your full name"
+                    className={styles.inputControl}
+                    required
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className={styles.inputLabel}>
+                    Email *
+                  </label>
+                  <input
+                    id="email"
+                    type="email"
+                    name="email"
+                    placeholder="you@example.com"
+                    className={styles.inputControl}
+                    required
+                  />
+                </div>
+              </div>
+              <div>
+                <label htmlFor="comment" className={styles.inputLabel}>
+                  Comment *
+                </label>
+                <textarea
+                  id="comment"
+                  name="comment"
+                  rows={4}
+                  placeholder="Write your comment here..."
+                  className={styles.inputControl}
+                  required
+                />
+              </div>
+              <div>
+                <button
+                  type="submit"
+                  className={styles.submitButton}
+                >
+                  Post comment
+                </button>
+              </div>
+              <p className={styles.commentsNote}>
+                Your email address will not be published. Required fields are marked *
+              </p>
+            </form>
+          </div>
         </section>
 
-        <div className="mx-auto max-w-[860px] px-16 pb-10 text-[0.78rem] text-[#6f746c] max-sm:px-5">
+        <div className={styles.disclaimerBar}>
           Powered by Nirogyn · Not a substitute for medical advice
         </div>
-      </div>
-      <Footer />
-    </>
+      </main>
+
+      <footer className={styles.pageFooter}>
+        © 2026 Nirogyn Healthcare Pvt. Ltd. All rights reserved.
+      </footer>
+    </div>
   );
 }

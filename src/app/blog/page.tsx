@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Navbar from "@/app/blog/Navbar";
-import Footer from "@/components/Footer";
 import { getPublishedPosts } from "@/lib/posts";
+import styles from "./blog-pages.module.css";
 
 export const dynamic = "force-dynamic";
 
@@ -16,76 +15,100 @@ export default async function BlogPage() {
   const posts = await getPublishedPosts();
 
   return (
-    <>
-      <Navbar />
-      <div className="blog-listing-page">
-        {/* Hero */}
-        <header className="blog-listing-hero">
-          <div className="blog-listing-hero-inner">
-            <div className="blog-tag" style={{ marginBottom: "1.2rem" }}>From Our Blog</div>
-            <h1 className="blog-listing-title">Wellness, Grounded in Science</h1>
-            <p className="blog-listing-sub">
-              Evidence-based articles on gut health, nutrition, sleep, stress, and more — written for India.
-            </p>
-          </div>
-        </header>
+    <div className={styles.indexPage}>
+      <header className={styles.topNav}>
+        <div className={styles.navInner}>
+          <Link href="/" className={styles.navBackLink}>
+            ← Nirogyn.com
+          </Link>
+          <span className={styles.navLabel}>Blog</span>
+          <Link href="/ask" className={styles.navPill}>
+            Ask Nirogyn
+          </Link>
+        </div>
+      </header>
 
-        {/* Articles Grid */}
-        <section className="blog-listing-section">
-          <div className="blog-listing-container">
-            {posts.length === 0 ? (
-              <div className="blog-listing-empty">
-                <p>No articles published yet. Check back soon.</p>
-              </div>
-            ) : (
-              <div className="blog-listing-grid">
-                {posts.map((post) => (
-                  <Link key={post.id} href={`/blog/${post.slug}`} className="blog-listing-card">
-                    {post.featuredImage && (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={post.featuredImage}
-                        alt={post.featuredImageAlt || post.title}
-                        className="blog-listing-card-img"
-                      />
-                    )}
-                    {!post.featuredImage && (
-                      <div className="blog-listing-card-img-placeholder">
-                        <span>🌿</span>
-                      </div>
-                    )}
-                    <div className="blog-listing-card-body">
-                      {post.category && (
-                        <div className="blog-listing-cat">{post.category}</div>
-                      )}
-                      <h2 className="blog-listing-card-title">{post.title}</h2>
-                      {post.excerpt && (
-                        <p className="blog-listing-card-excerpt">{post.excerpt}</p>
-                      )}
-                      <div className="blog-listing-card-meta">
-                        <span>{post.author}</span>
-                        {post.readTime && (
-                          <>
-                            <span className="blog-meta-dot" />
-                            <span>{post.readTime}</span>
-                          </>
-                        )}
-                        <span className="blog-meta-dot" />
-                        <span>
-                          {new Date(post.createdAt).toLocaleDateString("en-IN", {
-                            day: "numeric", month: "short", year: "numeric",
-                          })}
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
+      <section className={styles.heroSection}>
+        <div className={styles.heroGlow} aria-hidden="true" />
+        <div className={styles.heroInner}>
+          <p className={styles.heroKicker}>
+            Evidence-Based Wellness
+          </p>
+          <h1 className={styles.heroTitle}>
+            Wellness, Grounded in Science
+          </h1>
+          <p className={styles.heroSubtitle}>
+            Articles on gut health, nutrition, sleep, stress, and more — written for India.
+          </p>
+        </div>
+      </section>
+
+      <section className={styles.postsSection}>
+        {posts.length === 0 ? (
+          <div className={styles.emptyState}>
+            No articles published yet. Check back soon.
           </div>
-        </section>
-      </div>
-      <Footer />
-    </>
+        ) : (
+          <div className={styles.postsGrid}>
+            {posts.map((post) => (
+              <Link
+                key={post.id}
+                href={`/blog/${post.slug}`}
+                className={styles.postCard}
+              >
+                {post.featuredImage ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={post.featuredImage}
+                    alt={post.featuredImageAlt || post.title}
+                    className={styles.postImage}
+                  />
+                ) : (
+                  <div className={styles.postImageFallback}>
+                    🌿
+                  </div>
+                )}
+                <div className={styles.postContent}>
+                  {post.category && (
+                    <span className={styles.postCategory}>
+                      {post.category}
+                    </span>
+                  )}
+                  <h2 className={styles.postCardTitle}>
+                    {post.title}
+                  </h2>
+                  {post.excerpt && (
+                    <p className={styles.postCardExcerpt}>
+                      {post.excerpt}
+                    </p>
+                  )}
+                  <div className={styles.postMeta}>
+                    <span>{post.author}</span>
+                    {post.readTime && (
+                      <>
+                        <span className={styles.metaDot}>·</span>
+                        <span>{post.readTime}</span>
+                      </>
+                    )}
+                    <span className={styles.metaDot}>·</span>
+                    <span>
+                      {new Date(post.createdAt).toLocaleDateString("en-IN", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </section>
+
+      <footer className={styles.pageFooter}>
+        © 2026 Nirogyn Healthcare Pvt. Ltd. · nirogyn.com
+      </footer>
+    </div>
   );
 }

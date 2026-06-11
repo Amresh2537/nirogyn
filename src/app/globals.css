@@ -8,7 +8,7 @@
   --gold: #e8c84a;
   --gold-light: #f5e07a;
   --cream: #f9f5ee;
-  --warm-white: #fdfaf4;
+  --warm-white: #f2ede6;
   --text-dark: #1a1a18;
   --text-muted: #5c6b5e;
   --leaf: #a8d96c;
@@ -405,7 +405,7 @@ nav.scrolled .nav-search input::placeholder { color: rgba(64,79,66,0.62); }
 }
 .marquee-track {
   display: flex; width: max-content;
-  animation: marquee 20s linear infinite;
+  animation: marquee 30s linear infinite;
 }
 .marquee-item {
   display: flex; align-items: center; gap: 1.5rem;
@@ -1882,10 +1882,14 @@ footer {
 }
 .social-icon svg { width: 15px; height: 15px; fill: currentColor; }
 .footer-bottom {
-  border-top: 1px solid rgba(255,255,255,0.06);
-  padding-top: 2rem; display: flex;
-  justify-content: space-between; align-items: center;
+ border-top: 1px solid rgba(255,255,255,0.06);
+  padding-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-size: 0.9rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 .footer-legal { display: flex; gap: 2rem; }
 .footer-legal a { color: rgba(249,245,238,0.3); text-decoration: none; transition: color 0.2s; font-size: 0.9rem; }

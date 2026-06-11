@@ -19,7 +19,8 @@ export default function Navbar() {
       const mobile = mediaQuery.matches;
       setIsMobile(mobile);
       if (!mobile) {
-        setIsMenuOpen(false);
+        // Don't auto-close menu on desktop when resizing
+        // setIsMenuOpen(false);
       }
     };
     syncMobileState();
@@ -70,12 +71,24 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, [isMenuOpen]);
 
-  const topics = [
+  // Desktop nav items (visible on desktop)
+  const desktopTopics = [
     { label: "EAT", href: "#topics" },
     { label: "MOVE", href: "#ingredients" },
     { label: "MIND", href: "#faq" },
     { label: "SLEEP", href: "#topics" },
     { label: "REPRODUCE", href: "#brands" },
+  ];
+
+  // Mobile dropdown items (includes all items)
+  const mobileTopics = [
+    { label: "EAT", href: "#topics" },
+    { label: "MOVE", href: "#ingredients" },
+    { label: "MIND", href: "#faq" },
+    { label: "SLEEP", href: "#topics" },
+    { label: "REPRODUCE", href: "#brands" },
+    { label: "SCIENCE", href: "#science" },
+    { label: "KNOW YOUR INGREDIENTS", href: "#ingredients" },
   ];
 
   const useLightNav = isHovering || isScrolled || isMenuOpen;
@@ -121,9 +134,7 @@ export default function Navbar() {
             <button
               type="button"
               className={`inline-flex h-[40px] w-[40px] flex-col items-center justify-center gap-1 rounded-lg border transition-colors duration-200 ${
-                isMobile
-                  ? "border-[rgba(255,255,255,0.4)] bg-[rgba(8,14,10,0.28)]"
-                  : useLightNav
+                useLightNav
                   ? "border-[rgba(16,63,34,0.22)] bg-[rgba(255,255,255,0.86)]"
                   : "border-[rgba(255,255,255,0.4)] bg-[rgba(8,14,10,0.28)]"
               }`}
@@ -155,12 +166,12 @@ export default function Navbar() {
               />
             </button>
 
-            {/* Dropdown Menu */}
+            {/* Dropdown Menu - Works on both mobile and desktop */}
             {isMenuOpen && (
               <div
                 id="mobileNavMenu"
                 className="absolute left-0 top-[calc(100%+8px)] z-[220]"
-                style={{ width: "220px" }}
+                style={{ width: "260px" }}
               >
                 <div
                   className="rounded-xl overflow-hidden"
@@ -187,7 +198,7 @@ export default function Navbar() {
                   </div>
 
                   {/* Nav items */}
-                  {topics.map((item) => (
+                  {mobileTopics.map((item) => (
                     <a
                       key={item.label}
                       href={item.href}
@@ -196,7 +207,7 @@ export default function Navbar() {
                       style={{
                         padding: "11px 18px",
                         color: "#1a3c1e",
-                        fontSize: "0.88rem",
+                        fontSize: item.label === "KNOW YOUR INGREDIENTS" ? "0.82rem" : "0.88rem",
                         fontWeight: 400,
                         letterSpacing: "0.06em",
                         borderBottom: "0.5px solid rgba(16,63,34,0.06)",
@@ -211,48 +222,27 @@ export default function Navbar() {
                       </span>
                     </a>
                   ))}
-
-                  {/* Footer CTA */}
-                  <div
-                    style={{
-                      padding: "12px",
-                      borderTop: "0.5px solid rgba(16,63,34,0.08)",
-                    }}
-                  >
-                    <Link
-                      href="/#ingredients"
-                      onClick={() => setIsMenuOpen(false)}
-                      className="flex items-center justify-center w-full rounded-full no-underline font-semibold"
-                      style={{
-                        padding: "9px 0",
-                        background: "linear-gradient(135deg, #245c2f, #3f874a)",
-                        color: "#b8f4a2",
-                        fontSize: "0.82rem",
-                        letterSpacing: "0.04em",
-                      }}
-                    >
-                      Know your Ingredients
-                    </Link>
-                  </div>
                 </div>
               </div>
             )}
           </div>
 
-          {/* Desktop nav links */}
-          {isMobile
-            ? null
-            : topics.map((item) => (
+          {/* Desktop nav links - Only show original 5 items */}
+          {!isMobile && (
+            <>
+              {desktopTopics.map((item) => (
                 <a
                   key={item.label}
                   href={item.href}
-                  className={`no-underline px-3 py-1 text-[1.36rem] tracking-[0.02em] leading-none font-normal ${
+                  className={`no-underline px-3 py-1 text-[1.1rem] tracking-[0.02em] leading-none font-normal ${
                     useLightNav ? "text-[#1a3c1e]" : "text-white"
                   }`}
                 >
                   {item.label}
                 </a>
               ))}
+            </>
+          )}
         </div>
 
         {/* Logo */}

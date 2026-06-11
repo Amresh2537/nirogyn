@@ -2,11 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 
 const READ_ITEMS = [
-  { label: "EAT",        color: "var(--lime)" },
-  { label: "SLEEP",      color: "#5bc8e8" },
-  { label: "MOVE",       color: "#e87c5b" },
-  { label: "MIND",       color: "var(--gold)" },
-  { label: "REPRODUCE",  color: "#e85b75" },
+  { label: "EAT", color: "var(--lime)" },
+  { label: "SLEEP", color: "#5bc8e8" },
+  { label: "MOVE", color: "#e87c5b" },
+  { label: "MIND", color: "var(--gold)" },
+  { label: "REPRODUCE", color: "#e85b75" },
 ];
 
 const SCIENCE_ITEMS = [
@@ -17,10 +17,10 @@ const SCIENCE_ITEMS = [
 ];
 
 const COMPANY_ITEMS = [
-  { label: "About Us",   href: "/about" },
+  { label: "About Us", href: "/about" },
   { label: "Our Brands", href: "/brands" },
   { label: "Write for Us", href: "/write" },
-  { label: "FAQ",        href: "/faq" },
+  { label: "FAQ", href: "/faq" },
   { label: "Contact Us", href: "/contact" },
 ];
 
@@ -41,12 +41,36 @@ export default function Footer() {
       <div className="footer-top">
         {/* ── BRAND ── */}
         <div>
-          <a href="#" className="nav-logo" style={{ display: "inline-flex", marginBottom: "0.75rem" }}>
-            NIRO<span>GYN</span>
-            <span className="logo-dot" />
+          <a href="#" className="nav-logo" style={{ display: "inline-flex", alignItems: "center", gap: "2px", marginBottom: "0.75rem", textDecoration: "none" }}>
+            <span style={{ 
+              fontFamily: "'Playfair Display', serif", 
+              fontSize: "1.8rem", 
+              fontWeight: 700, 
+              color: "#8bc34a",
+              letterSpacing: "0.02em"
+            }}>
+              NIRO
+            </span>
+            <span style={{ 
+              fontFamily: "'Playfair Display', serif", 
+              fontSize: "1.8rem", 
+              fontWeight: 700, 
+              color: "#a8d96c",
+              letterSpacing: "0.02em"
+            }}>
+              GYN
+            </span>
+            <span className="logo-dot" style={{ 
+              width: "6px", 
+              height: "6px", 
+              borderRadius: "50%", 
+              background: "#c5e8a4", 
+              display: "inline-block", 
+              marginLeft: "4px" 
+            }} />
           </a>
           <p className="footer-about">
-            India&apos;s science-backed wellness education platform. Five pillars. Zero compromise.
+            India's science-backed wellness education platform. Five pillars. Zero compromise.
           </p>
 
           {/* Certification badges */}
@@ -110,9 +134,19 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="footer-bottom">
-        <span>© 2026 Nirogyn Healthcare Pvt. Ltd. All rights reserved.</span>
-        <div className="footer-legal">
+      <div className="footer-bottom" style={{ 
+        display: "flex", 
+        justifyContent: "space-between", 
+        alignItems: "center",
+        flexWrap: "wrap",
+        gap: "1rem"
+      }}>
+        <span style={{ whiteSpace: "nowrap" }}>© 2026 Nirogyn Healthcare Pvt. Ltd. All rights reserved.</span>
+        <div className="footer-legal" style={{ 
+          display: "flex", 
+          gap: "1.5rem",
+          flexWrap: "wrap"
+        }}>
           <Link href="/privacy">Privacy Policy</Link>
           <Link href="/terms">Terms &amp; Conditions</Link>
           <Link href="/disclaimer">Disclaimer</Link>
@@ -121,4 +155,3 @@ export default function Footer() {
     </footer>
   );
 }
-

@@ -127,7 +127,8 @@ export default function PostEditor({ postId }: Props) {
       });
 
       if (!res.ok) {
-        throw new Error("Upload failed");
+        const failed = await res.json().catch(() => ({ error: "Upload failed" }));
+        throw new Error(failed.error || "Upload failed");
       }
 
       const data = await res.json();
@@ -136,8 +137,9 @@ export default function PostEditor({ postId }: Props) {
         featuredImage: data.url,
         featuredImageAlt: prev.featuredImageAlt || prev.title,
       }));
-    } catch {
-      setUploadError("Image upload failed. Please try again.");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Image upload failed. Please try again.";
+      setUploadError(message);
     } finally {
       setUploadingImage(false);
     }

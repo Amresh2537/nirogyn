@@ -2,34 +2,8 @@ import Link from "next/link";
 import OptionalImage from "./OptionalImage";
 import { getPublishedPosts } from "@/lib/posts";
 
-/**
- * ARTICLE IMAGE SLOTS
- * Add images to /public/images/articles/ matching the `img` filenames.
- *
- * Featured article background:
- *   /public/images/articles/featured.jpg   (1200×800 px recommended)
- *
- * Mini article thumbnails (60×60 px):
- *   /public/images/articles/article-1.jpg  — Skin health
- *   /public/images/articles/article-2.jpg  — Sleep / Magnesium
- *   /public/images/articles/article-3.jpg  — Kids health
- *   /public/images/articles/article-4.jpg  — Men's health / Ashwagandha
- */
-const MINI_ARTICLES = [
-  { num: "01", cat: "Gut-Brain Axis", title: "90% of Your Serotonin Is Made in Your Gut",                 read: "8 min read", img: "article-gut", delay: "",              href: "/blog/gut-brain-axis" },
-  { num: "02", cat: "Skin Health",    title: "Why Your Diet Is Affecting Your Skin More Than You Think", read: "3 min read", img: "article-1",   delay: "reveal-delay-1", href: "#" },
-  { num: "03", cat: "Sleep",          title: "Magnesium for Sleep: Does It Actually Work?",               read: "4 min read", img: "article-2",   delay: "reveal-delay-2", href: "#" },
-  { num: "04", cat: "Kids Health",    title: "Essential Nutrients Every Indian Child Needs",              read: "5 min read", img: "article-3",   delay: "reveal-delay-3", href: "#" },
-  { num: "05", cat: "Men's Health",   title: "Ashwagandha for Stress: What Science Actually Says",       read: "4 min read", img: "article-4",   delay: "reveal-delay-4", href: "#" },
-];
-
 export default async function Articles() {
-  // Load CMS posts (published) and merge with static mini articles
-  const cmsPosts = (await getPublishedPosts()).slice(0, 4);
-  const cmsHrefs = new Set(cmsPosts.map((p) => `/blog/${p.slug}`));
-
-  // Filter static articles that aren't already represented by CMS posts
-  const staticArticles = MINI_ARTICLES.filter((a) => !cmsHrefs.has(a.href));
+  const latestPosts = (await getPublishedPosts()).slice(0, 5);
 
   return (
     <section className="articles-section" id="articles">
@@ -45,13 +19,9 @@ export default async function Articles() {
           <div className="section-tag reveal">Latest</div>
           <h2 className="section-title reveal reveal-delay-1">From Our Blog</h2>
         </div>
-        <Link href="/blog" className="btn-ghost reveal">
-          View All Articles ↗
-        </Link>
       </div>
 
       <div className="articles-grid">
-        {/* ── FEATURED ARTICLE ── */}
         <Link href="/blog/gut-brain-axis" className="article-featured reveal" style={{ textDecoration: "none" }}>
           <OptionalImage
             src="/images/blog.jpeg"
@@ -77,10 +47,8 @@ export default async function Articles() {
           </div>
         </Link>
 
-        {/* ── MINI ARTICLES ── */}
-        {/* ── MINI ARTICLES (static + CMS) ── */}
         <div className="articles-list">
-          {cmsPosts.map((post, i) => (
+          {latestPosts.map((post, i) => (
             <Link href={`/blog/${post.slug}`} className="article-mini reveal" key={post.id}>
               <div className="mini-num">{String(i + 1).padStart(2, "0")}</div>
               <div className="mini-content">
@@ -89,36 +57,35 @@ export default async function Articles() {
                 <div className="mini-read">{post.readTime || "Read article"}</div>
               </div>
               <div className="mini-thumb">
-                {post.featuredImage && (
+                {post.featuredImage ? (
                   <OptionalImage
                     src={post.featuredImage}
                     alt={post.featuredImageAlt || post.title}
                     fill
                     sizes="60px"
                   />
-                )}
+                ) : null}
               </div>
             </Link>
           ))}
-          {staticArticles.map(({ num, cat, title, read, img, delay, href }) => (
-            <Link href={href} className={`article-mini reveal ${delay}`} key={num}>
-              <div className="mini-num">{num}</div>
+
+          {latestPosts.length === 0 && (
+            <div className="article-mini reveal" style={{ pointerEvents: "none" }}>
+              <div className="mini-num">00</div>
               <div className="mini-content">
-                <div className="mini-cat">{cat}</div>
-                <div className="mini-title">{title}</div>
-                <div className="mini-read">{read}</div>
+                <div className="mini-cat">Blog</div>
+                <div className="mini-title">No published articles yet</div>
+                <div className="mini-read">Please check back soon</div>
               </div>
-              <div className="mini-thumb">
-                <OptionalImage
-                  src={`/images/articles/${img}.jpg`}
-                  alt={title}
-                  fill
-                  sizes="60px"
-                />
-              </div>
-            </Link>
-          ))}
+            </div>
+          )}
         </div>
+      </div>
+
+      <div style={{ marginTop: "2rem", textAlign: "center" }}>
+        <Link href="/blog" className="btn-ghost reveal">
+          Explore All Articles ↗
+        </Link>
       </div>
     </section>
   );

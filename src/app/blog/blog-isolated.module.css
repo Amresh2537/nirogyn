@@ -14,7 +14,7 @@
   font-family: var(--blog-serif), "Lora", Georgia, serif;
 }
 
-.blogRoot :where(p, li, span, a, button, input, textarea, label, time, th, td) {
+.blogRoot :where(p, li, span, button, input, textarea, label, time, th, td) {
   font-family: var(--blog-sans), "Plus Jakarta Sans", "Segoe UI", sans-serif;
 }
 

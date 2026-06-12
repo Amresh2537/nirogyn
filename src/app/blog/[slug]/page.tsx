@@ -110,13 +110,15 @@ export default async function DynamicBlogPost({ params }: Props) {
                 {relatedPosts.map((item) => (
                   <Link key={item.id} href={`/blog/${item.slug}`} className={styles.postCard}>
                     {item.featuredImage ? (
-                      <OptionalImage
-                        src={item.featuredImage}
-                        alt={item.featuredImageAlt || item.title}
-                        width={800}
-                        height={450}
-                        className={styles.postImage}
-                      />
+                      <div className={styles.postImageContainer}>
+                        <OptionalImage
+                          src={item.featuredImage}
+                          alt={item.featuredImageAlt || item.title}
+                          width={800}
+                          height={450}
+                          className={styles.postImage}
+                        />
+                      </div>
                     ) : (
                       <div className={styles.postImageFallback}>🌿</div>
                     )}

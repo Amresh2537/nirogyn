@@ -154,12 +154,30 @@
   padding: 3.2rem 1.25rem 4.4rem;
 }
 
-.categoryRibbonWrap {
-  margin-bottom: 1.5rem;
-  border: 1px solid rgba(20, 41, 28, 0.11);
-  border-radius: 1.05rem;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.46));
-  padding: 0.95rem;
+.categoryFilterForm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: fit-content;
+  margin: 0 auto 1.5rem;
+}
+
+.categorySelect {
+  min-width: 220px;
+  border: 1px solid rgba(28, 56, 37, 0.22);
+  border-radius: 0.72rem;
+  background: #fff;
+  padding: 0.6rem 0.8rem;
+  color: #244b2f;
+  font-size: 0.92rem;
+  font-weight: 600;
+  outline: none;
+}
+
+.categorySelect:focus {
+  border-color: rgba(39, 81, 52, 0.6);
+  box-shadow: 0 0 0 3px rgba(111, 145, 98, 0.18);
 }
 
 .categoryLabel {
@@ -219,7 +237,8 @@
 .postsGrid {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 1.1rem;
+  column-gap: 1.25rem;
+  row-gap: 2.5rem;
 }
 
 .postCard {
@@ -240,10 +259,28 @@
   box-shadow: 0 26px 48px -26px rgba(24, 44, 28, 0.46);
 }
 
+.postImageContainer {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+}
+
 .postImage {
   width: 100%;
-  height: 9rem;
+  height: 100%;
   object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.postImageListing {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  padding: 0;
+  display: block;
 }
 
 .postImageFallback {
@@ -257,7 +294,7 @@
 
 .postContent {
   display: flex;
-  min-height: 13.5rem;
+  min-height: 9.5rem;
   flex: 1;
   flex-direction: column;
   padding: 1.3rem 1.25rem 1.2rem;
@@ -544,10 +581,6 @@
     padding-right: 1.9rem;
   }
 
-  .categoryRibbonWrap {
-    padding: 1.1rem 1.15rem;
-  }
-
   .postsSection {
     padding-left: 1.9rem;
     padding-right: 1.9rem;
@@ -582,10 +615,6 @@
     letter-spacing: 0.16em;
   }
 
-  .categoryRibbonWrap {
-    padding: 1.1rem 1.15rem;
-  }
-
   .navSpacer {
     display: none;
   }
@@ -602,5 +631,14 @@
 
   .commentsCard {
     padding: 1.1rem;
+  }
+
+  .categoryFilterForm {
+    width: 100%;
+  }
+
+  .categorySelect {
+    min-width: 0;
+    width: 100%;
   }
 }

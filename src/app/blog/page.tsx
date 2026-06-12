@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Footer from "@/components/Footer";
 import { getPublishedPosts } from "@/lib/posts";
+import CategorySelect from "./CategorySelect";
 import styles from "./blog-pages.module.css";
 
 export const dynamic = "force-dynamic";
@@ -55,28 +56,12 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
       <section className={styles.postsSection}>
         {categories.length > 0 && (
-          <div className={styles.categoryRibbonWrap}>
-            <p className={styles.categoryLabel}>Which category do you want to read?</p>
-            <div className={styles.categoryChips}>
-              <Link
-                href="/blog"
-                className={`${styles.categoryChip} ${activeCategory === "all" ? styles.categoryChipActive : ""}`}
-              >
-                All
-              </Link>
-              {categories.map((category) => (
-                <Link
-                  key={category}
-                  href={{ pathname: "/blog", query: { category } }}
-                  className={`${styles.categoryChip} ${activeCategory === category ? styles.categoryChipActive : ""}`}
-                >
-                  {category}
-                </Link>
-              ))}
-            </div>
-            <p className={styles.resultsHint}>
-              Showing: {activeCategory === "all" ? "All categories" : activeCategory}
-            </p>
+          <div className={styles.categoryFilterForm}>
+            <CategorySelect
+              categories={categories}
+              activeCategory={activeCategory}
+              className={styles.categorySelect}
+            />
           </div>
         )}
 
@@ -95,12 +80,14 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                 className={styles.postCard}
               >
                 {post.featuredImage ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={post.featuredImage}
-                    alt={post.featuredImageAlt || post.title}
-                    className={styles.postImage}
-                  />
+                  <div className={styles.postImageContainer}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={post.featuredImage}
+                      alt={post.featuredImageAlt || post.title}
+                      className={styles.postImage}
+                    />
+                  </div>
                 ) : (
                   <div className={styles.postImageFallback}>
                     🌿
@@ -115,11 +102,6 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                   <h2 className={styles.postCardTitle}>
                     {post.title}
                   </h2>
-                  {post.excerpt && (
-                    <p className={styles.postCardExcerpt}>
-                      {post.excerpt}
-                    </p>
-                  )}
                   <div className={styles.postMeta}>
                     <span>{post.author}</span>
                     {post.readTime && (

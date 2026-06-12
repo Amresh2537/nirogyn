@@ -207,13 +207,15 @@ export default async function GutBrainAxisPage() {
               {relatedPosts.map((post) => (
                 <Link key={post.id} href={`/blog/${post.slug}`} className={styles.postCard}>
                   {post.featuredImage ? (
-                    <OptionalImage
-                      src={post.featuredImage}
-                      alt={post.featuredImageAlt || post.title}
-                      width={800}
-                      height={450}
-                      className={styles.postImage}
-                    />
+                    <div className={styles.postImageContainer}>
+                      <OptionalImage
+                        src={post.featuredImage}
+                        alt={post.featuredImageAlt || post.title}
+                        width={800}
+                        height={450}
+                        className={styles.postImage}
+                      />
+                    </div>
                   ) : (
                     <div className={styles.postImageFallback}>🌿</div>
                   )}

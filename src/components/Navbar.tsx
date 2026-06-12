@@ -249,6 +249,10 @@ export default function Navbar({ solid = false }: NavbarProps) {
                   className={`no-underline px-3 py-1 text-[1.1rem] tracking-[0.02em] leading-none font-normal ${
                     useLightNav ? "text-[#1a3c1e]" : "text-white"
                   }`}
+                  style={{
+                    fontFamily: "Calibri, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+                    fontSize: "1.1rem",
+                  }}
                 >
                   {item.label}
                 </a>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Footer from "@/components/Footer";
 import { getPublishedPosts } from "@/lib/posts";
 import styles from "./blog-pages.module.css";
 
@@ -37,18 +38,6 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
   return (
     <div className={styles.indexPage}>
-      <header className={styles.topNav}>
-        <div className={styles.navInner}>
-          <Link href="/" className={styles.navBackLink}>
-            ← Nirogyn.com
-          </Link>
-          <span className={styles.navLabel}>Blog</span>
-          <Link href="/ask" className={styles.navPill}>
-            Ask Nirogyn
-          </Link>
-        </div>
-      </header>
-
       <section className={styles.heroSection}>
         <div className={styles.heroGlow} aria-hidden="true" />
         <div className={styles.heroInner}>
@@ -155,9 +144,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         )}
       </section>
 
-      <footer className={styles.pageFooter}>
-        © 2026 Nirogyn Healthcare Pvt. Ltd. · nirogyn.com
-      </footer>
+      <Footer />
     </div>
   );
 }

@@ -3,7 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
-export default function Navbar() {
+interface NavbarProps {
+  solid?: boolean;
+}
+
+export default function Navbar({ solid = false }: NavbarProps) {
   const navTop = 0;
   const [isHovering, setIsHovering] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -31,6 +35,12 @@ export default function Navbar() {
 
   useEffect(() => {
     const controlNavbar = () => {
+      if (solid) {
+        setIsScrolled(true);
+        setIsVisible(true);
+        return;
+      }
+
       const currentScrollY = window.scrollY;
       const hasScrolledPastHero = currentScrollY > 4;
 
@@ -56,7 +66,7 @@ export default function Navbar() {
 
     window.addEventListener("scroll", controlNavbar, { passive: true });
     return () => window.removeEventListener("scroll", controlNavbar);
-  }, [isMobile]);
+  }, [isMobile, solid]);
 
   // Close menu on outside click
   useEffect(() => {
@@ -91,7 +101,7 @@ export default function Navbar() {
     { label: "KNOW YOUR INGREDIENTS", href: "#ingredients" },
   ];
 
-  const useLightNav = isHovering || isScrolled || isMenuOpen;
+  const useLightNav = solid || isHovering || isScrolled || isMenuOpen;
 
   return (
     <>
@@ -118,7 +128,9 @@ export default function Navbar() {
         `}
         style={{
           top: navTop,
-          transform: isVisible
+          transform: solid
+            ? "translateY(0)"
+            : isVisible
             ? "translateY(0)"
             : `translateY(calc(-100% - ${navTop}px))`,
         }}
@@ -265,7 +277,7 @@ export default function Navbar() {
             <>
               <form
                 action="#articles"
-                className={`flex items-center gap-0 h-[clamp(45px,3.5vw,32px)] w-[clamp(250px,20vw,360px)] rounded-full overflow-hidden ${
+                className={`relative flex items-center h-[clamp(45px,3.5vw,32px)] w-[clamp(250px,20vw,360px)] rounded-full overflow-hidden ${
                   useLightNav
                     ? "border-2 border-[rgba(16,63,34,0.8)] bg-white"
                     : "border-2 border-[rgba(255,255,255,0.78)] bg-black/20"
@@ -276,7 +288,7 @@ export default function Navbar() {
                   name="q"
                   placeholder="Search"
                   aria-label="Search"
-                  className={`w-full h-full border-none bg-transparent outline-none text-center placeholder:text-center text-[0.9rem] font-medium px-5 ${
+                  className={`w-full h-full border-none bg-transparent outline-none text-center placeholder:text-center text-[1.2rem] !mr-[10rem] font-medium px-5 pr-[50px] ${
                     useLightNav
                       ? "text-black placeholder:text-black/70"
                       : "text-white placeholder:text-white/70"
@@ -285,7 +297,7 @@ export default function Navbar() {
                 <button
                   type="submit"
                   aria-label="Search"
-                  className={`w-[54px] h-full border-none bg-transparent text-[1.6rem] font-medium cursor-pointer ${
+                  className={`absolute right-[15px] top-1/2 -translate-y-1/2 border-none bg-transparent text-[1.6rem] leading-none font-medium cursor-pointer ${
                     useLightNav ? "text-[#1a3c1e]" : "text-white"
                   }`}
                 >
@@ -310,6 +322,7 @@ export default function Navbar() {
           )}
         </div>
       </nav>
+      {solid && <div aria-hidden="true" className="h-[56px] md:h-[72px]" />}
     </>
   );
 }

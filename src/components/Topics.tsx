@@ -1,5 +1,6 @@
 "use client";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 // Icon components (simple SVG outlines matching the image style)
@@ -386,8 +387,8 @@ export default function Topics() {
             Science-backed wellness guides to help you understand your body better and live a healthier life.
           </p>
 
-          <a
-            href="#"
+          <Link
+            href="/blog"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -408,7 +409,7 @@ export default function Topics() {
           >
             Browse All Articles
             <ArrowRight size={15} />
-          </a>
+          </Link>
         </div>
 
         {/* ── RIGHT COLUMN ── */}

@@ -41,36 +41,30 @@ export default function Footer() {
       <div className="footer-top">
         {/* ── BRAND ── */}
         <div>
-          <a href="#" className="nav-logo" style={{ display: "inline-flex", alignItems: "center", gap: "2px", marginBottom: "0.75rem", textDecoration: "none" }}>
-            <span style={{ 
-              fontFamily: "'Playfair Display', serif", 
-              fontSize: "1.8rem", 
-              fontWeight: 700, 
-              color: "#8bc34a",
-              letterSpacing: "0.02em"
-            }}>
-              NIRO
+          <Link
+            href="/"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              marginBottom: "0.75rem",
+              textDecoration: "none",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "'Josefin Sans', sans-serif",
+                fontSize: "2rem",
+                fontWeight: 300,
+                lineHeight: 1,
+                letterSpacing: "0.08em",
+                color: "#a8d96c",
+              }}
+            >
+              NIROGYN
             </span>
-            <span style={{ 
-              fontFamily: "'Playfair Display', serif", 
-              fontSize: "1.8rem", 
-              fontWeight: 700, 
-              color: "#a8d96c",
-              letterSpacing: "0.02em"
-            }}>
-              GYN
-            </span>
-            <span className="logo-dot" style={{ 
-              width: "6px", 
-              height: "6px", 
-              borderRadius: "50%", 
-              background: "#c5e8a4", 
-              display: "inline-block", 
-              marginLeft: "4px" 
-            }} />
-          </a>
+          </Link>
           <p className="footer-about">
-            India's science-backed wellness education platform. Five pillars. Zero compromise.
+            India&apos;s science-backed wellness education platform. Five pillars. Zero compromise.
           </p>
 
           {/* Certification badges */}

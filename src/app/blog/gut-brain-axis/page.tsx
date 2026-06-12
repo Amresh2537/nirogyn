@@ -1,6 +1,8 @@
 ﻿import type { Metadata } from "next";
 import Link from "next/link";
+import Footer from "@/components/Footer";
 import OptionalImage from "@/components/OptionalImage";
+import { getPublishedPosts } from "@/lib/posts";
 import styles from "../blog-pages.module.css";
 
 export const metadata: Metadata = {
@@ -36,18 +38,20 @@ const GUT_FOODS = [
   },
 ];
 
-export default function GutBrainAxisPage() {
+export default async function GutBrainAxisPage() {
+  const allPosts = await getPublishedPosts();
+  const relatedPosts = allPosts
+    .filter((post) => post.slug !== "gut-brain-axis")
+    .filter((post) => post.category.trim() === "Gut-Brain Axis")
+    .slice(0, 4);
+
   return (
     <div className={styles.postPage}>
-      <header className={styles.postTopNav}>
-        <div className={styles.navInner}>
-          <Link href="/blog" className={styles.navBackLink}>
-            Back to all articles
-          </Link>
-          <span className={styles.navLabel}>Article</span>
-          <div className={styles.navSpacer} />
-        </div>
-      </header>
+      <div className={styles.postBackRow}>
+        <Link href="/blog" className={styles.postBackLink}>
+          ← Back to all articles
+        </Link>
+      </div>
 
       <section className={styles.postHero}>
         <div className={styles.heroGlow} aria-hidden="true" />
@@ -195,6 +199,45 @@ export default function GutBrainAxisPage() {
         </div>
       </article>
 
+      {relatedPosts.length > 0 && (
+        <section className={styles.relatedSection}>
+          <div className={styles.relatedInner}>
+            <h2 className={styles.relatedTitle}>Related in Gut-Brain Axis</h2>
+            <div className={styles.postsGrid}>
+              {relatedPosts.map((post) => (
+                <Link key={post.id} href={`/blog/${post.slug}`} className={styles.postCard}>
+                  {post.featuredImage ? (
+                    <OptionalImage
+                      src={post.featuredImage}
+                      alt={post.featuredImageAlt || post.title}
+                      width={800}
+                      height={450}
+                      className={styles.postImage}
+                    />
+                  ) : (
+                    <div className={styles.postImageFallback}>🌿</div>
+                  )}
+                  <div className={styles.postContent}>
+                    {post.category && <span className={styles.postCategory}>{post.category}</span>}
+                    <h3 className={styles.postCardTitle}>{post.title}</h3>
+                    {post.excerpt && <p className={styles.postCardExcerpt}>{post.excerpt}</p>}
+                    <div className={styles.postMeta}>
+                      <span>{post.author}</span>
+                      {post.readTime && (
+                        <>
+                          <span className={styles.metaDot}>·</span>
+                          <span>{post.readTime}</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       <section className={styles.commentsSection}>
         <div className={styles.commentsCard}>
           <h2 className={styles.commentsTitle}>Leave a comment</h2>
@@ -251,9 +294,7 @@ export default function GutBrainAxisPage() {
         Powered by Nirogyn - Not a substitute for medical advice
       </div>
 
-      <footer className={styles.pageFooter}>
-        Copyright 2026 Nirogyn Healthcare Pvt. Ltd. All rights reserved.
-      </footer>
+      <Footer />
     </div>
   );
 }

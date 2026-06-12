@@ -71,6 +71,29 @@
   width: 6rem;
 }
 
+.postBackRow {
+  width: 100%;
+  padding: 1rem 1.25rem 0.35rem;
+  text-align: left;
+  position: relative;
+  z-index: 5;
+}
+
+.postBackLink {
+  display: inline-flex;
+  align-items: center;
+  color: #204630;
+  font-size: 0.94rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.postBackLink:hover {
+  color: #16311f;
+}
+
 .heroSection,
 .postHero {
   position: relative;
@@ -392,6 +415,24 @@
   color: #1f3425;
 }
 
+.relatedSection {
+  border-top: 1px solid rgba(18, 35, 24, 0.11);
+  border-bottom: 1px solid rgba(18, 35, 24, 0.11);
+  background: linear-gradient(180deg, rgba(237, 233, 224, 0.42), rgba(241, 238, 232, 0.68));
+  padding: 2.2rem 1.25rem;
+}
+
+.relatedInner {
+  margin: 0 auto;
+  max-width: 76rem;
+}
+
+.relatedTitle {
+  margin: 0 0 1rem;
+  color: #132418;
+  font-size: clamp(1.2rem, 2.1vw, 1.7rem);
+}
+
 .commentsSection {
   border-top: 1px solid rgba(18, 35, 24, 0.11);
   background: linear-gradient(180deg, rgba(237, 233, 224, 0.65), rgba(241, 238, 232, 0.95));
@@ -503,6 +544,10 @@
     padding-right: 1.9rem;
   }
 
+  .categoryRibbonWrap {
+    padding: 1.1rem 1.15rem;
+  }
+
   .postsSection {
     padding-left: 1.9rem;
     padding-right: 1.9rem;
@@ -535,10 +580,10 @@
 
   .navLabel {
     letter-spacing: 0.16em;
-  .categoryRibbonWrap {
-    padding: 1.1rem 1.15rem;
   }
 
+  .categoryRibbonWrap {
+    padding: 1.1rem 1.15rem;
   }
 
   .navSpacer {

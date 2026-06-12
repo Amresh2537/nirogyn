@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Lora, Plus_Jakarta_Sans } from "next/font/google";
+import Navbar from "@/components/Navbar";
 import styles from "./blog-isolated.module.css";
 
 const blogSerif = Lora({
@@ -19,6 +20,7 @@ const blogSans = Plus_Jakarta_Sans({
 export default function BlogLayout({ children }: { children: ReactNode }) {
   return (
     <div className={`${styles.blogRoot} ${blogSerif.variable} ${blogSans.variable}`}>
+      <Navbar solid />
       {children}
     </div>
   );

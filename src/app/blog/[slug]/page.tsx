@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import Footer from "@/components/Footer";
 import OptionalImage from "@/components/OptionalImage";
-import { getPostBySlug } from "@/lib/posts";
+import { getPostBySlug, getPublishedPosts } from "@/lib/posts";
 import styles from "../blog-pages.module.css";
 
 export const dynamic = "force-dynamic";
@@ -26,21 +27,24 @@ export default async function DynamicBlogPost({ params }: Props) {
   const post = await getPostBySlug(slug);
   if (!post) notFound();
 
+  const allPosts = await getPublishedPosts();
+  const sameCategory = allPosts.filter(
+    (item) => item.slug !== post.slug && item.category.trim() === post.category.trim()
+  );
+  const fallbackPosts = allPosts.filter(
+    (item) => item.slug !== post.slug && item.category.trim() !== post.category.trim()
+  );
+  const relatedPosts = [...sameCategory, ...fallbackPosts].slice(0, 4);
+
   return (
     <div className={styles.postPage}>
-      <header className={styles.postTopNav}>
-        <div className={styles.navInner}>
-          <Link href="/blog" className={styles.navBackLink}>
+      <main>
+        <div className={styles.postBackRow}>
+          <Link href="/blog" className={styles.postBackLink}>
             ← Back to all articles
           </Link>
-          <span className={styles.navLabel}>
-            Article
-          </span>
-          <div className={styles.navSpacer} />
         </div>
-      </header>
 
-      <main>
         <section className={styles.postHero}>
           <div className={styles.heroGlow} aria-hidden="true" />
           <div className={styles.postHeroInner}>
@@ -97,6 +101,45 @@ export default async function DynamicBlogPost({ params }: Props) {
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
         </article>
+
+        {relatedPosts.length > 0 && (
+          <section className={styles.relatedSection}>
+            <div className={styles.relatedInner}>
+              <h2 className={styles.relatedTitle}>Related in {post.category || "Wellness"}</h2>
+              <div className={styles.postsGrid}>
+                {relatedPosts.map((item) => (
+                  <Link key={item.id} href={`/blog/${item.slug}`} className={styles.postCard}>
+                    {item.featuredImage ? (
+                      <OptionalImage
+                        src={item.featuredImage}
+                        alt={item.featuredImageAlt || item.title}
+                        width={800}
+                        height={450}
+                        className={styles.postImage}
+                      />
+                    ) : (
+                      <div className={styles.postImageFallback}>🌿</div>
+                    )}
+                    <div className={styles.postContent}>
+                      {item.category && <span className={styles.postCategory}>{item.category}</span>}
+                      <h3 className={styles.postCardTitle}>{item.title}</h3>
+                      {item.excerpt && <p className={styles.postCardExcerpt}>{item.excerpt}</p>}
+                      <div className={styles.postMeta}>
+                        <span>{item.author}</span>
+                        {item.readTime && (
+                          <>
+                            <span className={styles.metaDot}>·</span>
+                            <span>{item.readTime}</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         <section className={styles.commentsSection}>
           <div className={styles.commentsCard}>
@@ -165,9 +208,7 @@ export default async function DynamicBlogPost({ params }: Props) {
         </div>
       </main>
 
-      <footer className={styles.pageFooter}>
-        © 2026 Nirogyn Healthcare Pvt. Ltd. All rights reserved.
-      </footer>
+      <Footer />
     </div>
   );
 }

@@ -219,13 +219,13 @@
 
 .postImage {
   width: 100%;
-  height: 13rem;
+  height: 9rem;
   object-fit: cover;
 }
 
 .postImageFallback {
   display: grid;
-  height: 13rem;
+  height: 9rem;
   place-items: center;
   background: linear-gradient(135deg, #153c23, #264d31);
   color: #d7e7c2;
@@ -327,8 +327,10 @@
 .featuredImage {
   width: 100%;
   height: auto;
+  display: block;
+  object-fit: contain;
   border: 1px solid rgba(20, 41, 28, 0.13);
-  border-radius: 1.05rem;
+  border-radius: 20px;
   box-shadow: 0 24px 44px -30px rgba(22, 42, 28, 0.7);
 }
 

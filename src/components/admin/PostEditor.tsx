@@ -367,16 +367,18 @@ export default function PostEditor({ postId }: Props) {
 
               <div className="admin-field">
                 <label className="admin-label">Category</label>
-                <select
-                  className="admin-select"
+                <input
+                  className="admin-input"
+                  list="blog-category-options"
+                  placeholder="Type or choose a category"
                   value={form.category}
                   onChange={(e) => set("category", e.target.value)}
-                >
-                  <option value="">Select category</option>
+                />
+                <datalist id="blog-category-options">
                   {CATEGORIES.map((c) => (
-                    <option key={c} value={c}>{c}</option>
+                    <option key={c} value={c} />
                   ))}
-                </select>
+                </datalist>
               </div>
 
               <label className="admin-checkbox-row">

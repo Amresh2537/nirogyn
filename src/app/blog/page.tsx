@@ -11,8 +11,29 @@ export const metadata: Metadata = {
     "Evidence-based wellness articles on gut health, nutrition, sleep, stress, and more — built for India.",
 };
 
-export default async function BlogPage() {
+interface BlogPageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+function pickSearchParam(value: string | string[] | undefined): string {
+  if (Array.isArray(value)) return value[0] ?? "";
+  return value ?? "";
+}
+
+export default async function BlogPage({ searchParams }: BlogPageProps) {
   const posts = await getPublishedPosts();
+  const params = await searchParams;
+
+  const categories = Array.from(
+    new Set(posts.map((post) => post.category.trim()).filter(Boolean))
+  ).sort((a, b) => a.localeCompare(b));
+
+  const requestedCategory = pickSearchParam(params.category).trim();
+  const activeCategory = categories.includes(requestedCategory) ? requestedCategory : "all";
+  const visiblePosts =
+    activeCategory === "all"
+      ? posts
+      : posts.filter((post) => post.category.trim() === activeCategory);
 
   return (
     <div className={styles.indexPage}>
@@ -44,13 +65,41 @@ export default async function BlogPage() {
       </section>
 
       <section className={styles.postsSection}>
-        {posts.length === 0 ? (
+        {categories.length > 0 && (
+          <div className={styles.categoryRibbonWrap}>
+            <p className={styles.categoryLabel}>Which category do you want to read?</p>
+            <div className={styles.categoryChips}>
+              <Link
+                href="/blog"
+                className={`${styles.categoryChip} ${activeCategory === "all" ? styles.categoryChipActive : ""}`}
+              >
+                All
+              </Link>
+              {categories.map((category) => (
+                <Link
+                  key={category}
+                  href={{ pathname: "/blog", query: { category } }}
+                  className={`${styles.categoryChip} ${activeCategory === category ? styles.categoryChipActive : ""}`}
+                >
+                  {category}
+                </Link>
+              ))}
+            </div>
+            <p className={styles.resultsHint}>
+              Showing: {activeCategory === "all" ? "All categories" : activeCategory}
+            </p>
+          </div>
+        )}
+
+        {visiblePosts.length === 0 ? (
           <div className={styles.emptyState}>
-            No articles published yet. Check back soon.
+            {activeCategory === "all"
+              ? "No articles published yet. Check back soon."
+              : `No articles found in ${activeCategory}.`}
           </div>
         ) : (
           <div className={styles.postsGrid}>
-            {posts.map((post) => (
+            {visiblePosts.map((post) => (
               <Link
                 key={post.id}
                 href={`/blog/${post.slug}`}

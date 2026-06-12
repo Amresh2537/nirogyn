@@ -131,6 +131,59 @@
   padding: 3.2rem 1.25rem 4.4rem;
 }
 
+.categoryRibbonWrap {
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(20, 41, 28, 0.11);
+  border-radius: 1.05rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.46));
+  padding: 0.95rem;
+}
+
+.categoryLabel {
+  margin: 0;
+  color: #2f4c35;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.categoryChips {
+  margin-top: 0.68rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.categoryChip {
+  border: 1px solid rgba(28, 56, 37, 0.2);
+  border-radius: 999px;
+  padding: 0.38rem 0.82rem;
+  color: #2a4b31;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.categoryChip:hover {
+  border-color: rgba(28, 56, 37, 0.42);
+  background: rgba(130, 157, 109, 0.17);
+}
+
+.categoryChipActive {
+  border-color: rgba(19, 42, 27, 0.8);
+  background: #1d3e29;
+  color: #ecf4e8;
+}
+
+.resultsHint {
+  margin: 0.75rem 0 0;
+  color: #58705d;
+  font-size: 0.76rem;
+}
+
 .emptyState {
   border: 1px dashed rgba(18, 35, 24, 0.24);
   border-radius: 1.25rem;
@@ -480,6 +533,10 @@
 
   .navLabel {
     letter-spacing: 0.16em;
+  .categoryRibbonWrap {
+    padding: 1.1rem 1.15rem;
+  }
+
   }
 
   .navSpacer {

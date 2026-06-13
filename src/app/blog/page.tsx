@@ -32,10 +32,27 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
   const requestedCategory = pickSearchParam(params.category).trim();
   const activeCategory = categories.includes(requestedCategory) ? requestedCategory : "all";
-  const visiblePosts =
+  const categoryFilteredPosts =
     activeCategory === "all"
       ? posts
       : posts.filter((post) => post.category.trim() === activeCategory);
+
+  const query = pickSearchParam(params.q).trim().toLowerCase();
+  const visiblePosts =
+    query.length === 0
+      ? categoryFilteredPosts
+      : categoryFilteredPosts.filter((post) => {
+          const title = post.title.toLowerCase();
+          const excerpt = post.excerpt.toLowerCase();
+          const category = post.category.toLowerCase();
+          const author = post.author.toLowerCase();
+          return (
+            title.includes(query) ||
+            excerpt.includes(query) ||
+            category.includes(query) ||
+            author.includes(query)
+          );
+        });
 
   return (
     <div className={styles.indexPage}>
@@ -67,7 +84,9 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
         {visiblePosts.length === 0 ? (
           <div className={styles.emptyState}>
-            {activeCategory === "all"
+            {query
+              ? `No articles found for "${query}"${activeCategory === "all" ? "" : ` in ${activeCategory}`}.`
+              : activeCategory === "all"
               ? "No articles published yet. Check back soon."
               : `No articles found in ${activeCategory}.`}
           </div>

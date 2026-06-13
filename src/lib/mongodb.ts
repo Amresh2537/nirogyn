@@ -1,6 +1,6 @@
 import { MongoClient, type Db } from "mongodb";
 
-const MONGODB_DB = process.env.MONGODB_DB ?? "nirogyn";
+const MONGODB_DB = process.env.MONGODB_DB?.trim();
 
 declare global {
   var __nirogynMongoClientPromise: Promise<MongoClient> | undefined;
@@ -24,8 +24,13 @@ export async function getDbOrNull(): Promise<Db | null> {
   const clientPromise = getClientPromise();
   if (!clientPromise) return null;
 
-  const client = await clientPromise;
-  return client.db(MONGODB_DB);
+  try {
+    const client = await clientPromise;
+    return MONGODB_DB ? client.db(MONGODB_DB) : client.db();
+  } catch {
+    global.__nirogynMongoClientPromise = undefined;
+    return null;
+  }
 }
 
 export async function getDb(): Promise<Db> {

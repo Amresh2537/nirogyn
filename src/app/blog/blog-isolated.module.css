@@ -2,7 +2,7 @@
   min-height: 100vh;
   background: #f2ede6;
   color: #1a1a18;
-  font-family: var(--blog-sans), "Plus Jakarta Sans", "Segoe UI", sans-serif;
+  font-family: var(--blog-sans), "Nunito", "Segoe UI", sans-serif;
   isolation: isolate;
 }
 
@@ -15,7 +15,7 @@
 }
 
 .blogRoot :where(p, li, span, button, input, textarea, label, time, th, td) {
-  font-family: var(--blog-sans), "Plus Jakarta Sans", "Segoe UI", sans-serif;
+  font-family: var(--blog-sans), "Nunito", "Segoe UI", sans-serif;
 }
 
 .blogRoot :where(a) {

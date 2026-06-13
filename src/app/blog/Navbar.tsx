@@ -2,12 +2,16 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface NavbarProps {
   solid?: boolean;
 }
 
 export default function Navbar({ solid = false }: NavbarProps) {
+  const pathname = usePathname();
+  const isHomePage = pathname === "/";
+  const forceSolid = solid || !isHomePage;
   const navTop = 0;
   const [isHovering, setIsHovering] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -35,7 +39,7 @@ export default function Navbar({ solid = false }: NavbarProps) {
 
   useEffect(() => {
     const controlNavbar = () => {
-      if (solid) {
+      if (forceSolid) {
         setIsScrolled(true);
         setIsVisible(true);
         return;
@@ -66,7 +70,7 @@ export default function Navbar({ solid = false }: NavbarProps) {
 
     window.addEventListener("scroll", controlNavbar, { passive: true });
     return () => window.removeEventListener("scroll", controlNavbar);
-  }, [isMobile, solid]);
+  }, [forceSolid, isMobile]);
 
   // Close menu on outside click
   useEffect(() => {
@@ -101,7 +105,7 @@ export default function Navbar({ solid = false }: NavbarProps) {
     { label: "KNOW YOUR INGREDIENTS", href: "#ingredients" },
   ];
 
-  const useLightNav = solid || isHovering || isScrolled || isMenuOpen;
+  const useLightNav = forceSolid || isHovering || isScrolled || isMenuOpen;
 
   return (
     <>
@@ -121,14 +125,16 @@ export default function Navbar({ solid = false }: NavbarProps) {
           ${isVisible ? "opacity-100" : "opacity-0 pointer-events-none"}
           ${isMobile ? "grid-cols-[40px_minmax(0,1fr)_40px]" : "grid-cols-[1fr_auto_1fr]"}
           ${
-            useLightNav
+            forceSolid
+              ? "border-b border-[rgba(16,63,34,0.08)] bg-white backdrop-blur-[6px]"
+              : useLightNav
               ? "border-b border-[rgba(16,63,34,0.08)] bg-[#f7f8f7] backdrop-blur-[6px]"
               : "border-b border-transparent !bg-transparent backdrop-blur-0"
           }
         `}
         style={{
           top: navTop,
-          transform: solid
+          transform: forceSolid
             ? "translateY(0)"
             : isVisible
             ? "translateY(0)"
@@ -250,7 +256,6 @@ export default function Navbar({ solid = false }: NavbarProps) {
                     useLightNav ? "text-[#1a3c1e]" : "text-white"
                   }`}
                   style={{
-                    fontFamily: "Calibri, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
                     fontSize: "1.1rem",
                   }}
                 >
@@ -264,7 +269,7 @@ export default function Navbar({ solid = false }: NavbarProps) {
         {/* Logo */}
         <Link
           href="/"
-          className={`justify-self-center font-light leading-none tracking-[0.08em] no-underline font-['Josefin_Sans',sans-serif] ${
+          className={`nirogyn-logo justify-self-center font-light leading-none tracking-[0.08em] no-underline font-['Josefin_Sans',sans-serif] ${
             isMobile ? "text-[1.65rem] text-center" : "text-[2.55rem]"
           } ${useLightNav ? "text-[#1a3c1e]" : "text-white"}`}
         >

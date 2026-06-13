@@ -45,55 +45,53 @@ export default async function DynamicBlogPost({ params }: Props) {
           </Link>
         </div>
 
-        <section className={styles.postHero}>
-          <div className={styles.heroGlow} aria-hidden="true" />
-          <div className={styles.postHeroInner}>
-            <div className={styles.postMeta}>
-              <time dateTime={post.createdAt}>
-                {new Date(post.createdAt).toLocaleDateString("en-IN", {
-                  day: "numeric",
-                  month: "short",
-                  year: "numeric",
-                })}
-              </time>
-              {post.category && (
-                <>
-                  <span className={styles.metaDot}>·</span>
-                  <span>{post.category}</span>
-                </>
-              )}
-              {post.readTime && (
-                <>
-                  <span className={styles.metaDot}>·</span>
-                  <span>{post.readTime}</span>
-                </>
+        <section className={styles.postHeroMockOuter}>
+          <div className={styles.postHeroMockCard}>
+            <div className={styles.postHeroMockMedia} aria-hidden="true">
+              {post.featuredImage ? (
+                <OptionalImage
+                  src={post.featuredImage}
+                  alt={post.featuredImageAlt || post.title}
+                  width={1400}
+                  height={600}
+                  className={styles.postHeroMockMediaImage}
+                  priority
+                />
+              ) : (
+                <div className={styles.postHeroMockMediaLabel}>
+                  <span className={styles.postHeroMockMediaIcon}>🖼</span>
+                  <span>Featured image (object-fit: cover, aspect-ratio 21/9)</span>
+                </div>
               )}
             </div>
 
-            <h1 className={styles.postTitle}>
-              {post.title}
-            </h1>
+            <div className={styles.postHeroMockContent}>
+              <div className={styles.postHeroMockMeta}>
+                <time dateTime={post.createdAt}>
+                  {new Date(post.createdAt).toLocaleDateString("en-IN", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })}
+                </time>
+                {post.category && (
+                  <>
+                    <span className={styles.postHeroMockDot}>·</span>
+                    <span>{post.category}</span>
+                  </>
+                )}
+                {post.readTime && (
+                  <>
+                    <span className={styles.postHeroMockDot}>·</span>
+                    <span>{post.readTime}</span>
+                  </>
+                )}
+              </div>
 
-            {post.excerpt && (
-              <p className={styles.postExcerpt}>
-                {post.excerpt}
-              </p>
-            )}
+              <h1 className={styles.postHeroMockTitle}>{post.title}</h1>
+            </div>
           </div>
         </section>
-
-        {post.featuredImage && (
-          <div className={styles.featuredWrap}>
-            <OptionalImage
-              src={post.featuredImage}
-              alt={post.featuredImageAlt || post.title}
-              width={1400}
-              height={600}
-              className={styles.featuredImage}
-              priority
-            />
-          </div>
-        )}
 
         <article className={styles.postBodySection}>
           <div

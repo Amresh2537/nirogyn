@@ -51,6 +51,7 @@ export default function Footer() {
             }}
           >
             <span
+              className="nirogyn-logo"
               style={{
                 fontFamily: "'Josefin Sans', sans-serif",
                 fontSize: "2rem",

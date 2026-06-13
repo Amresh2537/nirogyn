@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
+import { Nunito, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import ScrollProgress from "@/components/ScrollProgress";
 import AnimationInit from "@/components/AnimationInit";
@@ -12,10 +12,10 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
-const jakartaSans = Plus_Jakarta_Sans({
-  variable: "--font-dm-sans",
+const nunito = Nunito({
+  variable: "--font-nunito",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400"],
   display: "swap",
 });
 
@@ -41,7 +41,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-scroll-behavior="smooth">
-      <body className={`${playfair.variable} ${jakartaSans.variable}`}>
+      <body className={`${playfair.variable} ${nunito.variable}`}>
         <ScrollProgress />
         {children}
         <AnimationInit />

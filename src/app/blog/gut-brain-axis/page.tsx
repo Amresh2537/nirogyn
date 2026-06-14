@@ -79,7 +79,7 @@ export default async function GutBrainAxisPage() {
           src="/images/hero/hero.jpeg"
           alt="Gut brain axis illustration"
           width={1400}
-          height={600}
+          height={900}
           className={styles.featuredImage}
           priority
         />
@@ -211,8 +211,8 @@ export default async function GutBrainAxisPage() {
                       <OptionalImage
                         src={post.featuredImage}
                         alt={post.featuredImageAlt || post.title}
-                        width={800}
-                        height={450}
+                        width={1400}
+                        height={900}
                         className={styles.postImage}
                       />
                     </div>

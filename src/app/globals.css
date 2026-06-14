@@ -2217,6 +2217,12 @@ footer {
   .newsletter-btn { font-size: 1rem; }
   .nl-privacy { font-size: 0.84rem; }
   footer { padding: 4rem 1.5rem 2rem; }
+  .footer-about { font-size: 0.86rem; }
+  .footer-col-title { font-size: 0.74rem; }
+  .footer-links a { font-size: 0.86rem; }
+  .footer-badge { font-size: 0.62rem; }
+  .footer-bottom { font-size: 0.8rem; }
+  .footer-legal a { font-size: 0.8rem; }
 }
 
 /* ─────────────────────────────────────────

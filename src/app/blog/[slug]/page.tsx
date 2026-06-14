@@ -127,8 +127,8 @@ export default async function DynamicBlogPost({ params }: Props) {
                         <OptionalImage
                           src={item.featuredImage}
                           alt={item.featuredImageAlt || item.title}
-                          width={800}
-                          height={450}
+                          width={1400}
+                          height={900}
                           className={styles.storyRelatedImage}
                         />
                       </div>

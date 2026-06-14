@@ -1,7 +1,7 @@
 "use client";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Icon components (simple SVG outlines matching the image style)
 function GutIcon() {
@@ -298,13 +298,23 @@ function SmallCard({ topic }: { topic: (typeof TOPIC_CARDS)[0] }) {
 
 export default function Topics() {
   const [featuredCard, ...smallCards] = TOPIC_CARDS;
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 900px)");
+    const update = () => setIsMobile(media.matches);
+    update();
+
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
 
   return (
     <section
       style={{
         position: "relative",
         background: "#f2ede6",
-        padding: "clamp(3rem, 7vw, 5rem) clamp(1rem, 4vw, 2.5rem)",
+        padding: isMobile ? "3rem 1rem" : "5rem 2.5rem",
         overflow: "hidden",
       }}
     >
@@ -330,8 +340,8 @@ export default function Topics() {
           maxWidth: "1300px",
           margin: "0 auto",
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-          gap: "clamp(1.25rem, 3.5vw, 3.5rem)",
+          gridTemplateColumns: isMobile ? "1fr" : "1fr 2.5fr",
+          gap: isMobile ? "1.5rem" : "3.5rem",
           alignItems: "start",
         }}
       >
@@ -381,7 +391,7 @@ export default function Topics() {
               lineHeight: 1.75,
               color: "#627264",
               margin: 0,
-              maxWidth: "520px",
+              maxWidth: isMobile ? "520px" : "260px",
             }}
           >
             Science-backed wellness guides to help you understand your body better and live a healthier life.
@@ -415,7 +425,7 @@ export default function Topics() {
         {/* ── RIGHT COLUMN ── */}
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           {/* Featured large card */}
-          <div style={{ height: "clamp(220px, 46vw, 300px)" }}>
+          <div style={{ height: isMobile ? "240px" : "300px" }}>
             <FeaturedCard topic={featuredCard} />
           </div>
 
@@ -423,7 +433,7 @@ export default function Topics() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+              gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
               gap: "1rem",
             }}
           >

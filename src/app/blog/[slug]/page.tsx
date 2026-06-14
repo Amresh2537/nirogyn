@@ -75,6 +75,21 @@ export default async function DynamicBlogPost({ params }: Props) {
                 <span className={styles.storyMetaPill}>By {post.author}</span>
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className={styles.storyBodyShell}>
+          <div className={styles.storyRailColumn}>
+            {articleHeadings.length > 0 && (
+              <aside className={styles.storyRail}>
+                <p className={styles.storyRailTitle}>In this article</p>
+                <ul className={styles.storyRailList}>
+                  {articleHeadings.map((heading) => (
+                    <li key={heading}>{heading}</li>
+                  ))}
+                </ul>
+              </aside>
+            )}
 
             <div className={styles.storyMediaWrap}>
               {post.featuredImage ? (
@@ -93,26 +108,15 @@ export default async function DynamicBlogPost({ params }: Props) {
               )}
             </div>
           </div>
-        </section>
 
-        <section className={styles.storyBodyShell}>
-          {articleHeadings.length > 0 && (
-            <aside className={styles.storyRail}>
-              <p className={styles.storyRailTitle}>In this article</p>
-              <ul className={styles.storyRailList}>
-                {articleHeadings.map((heading) => (
-                  <li key={heading}>{heading}</li>
-                ))}
-              </ul>
-            </aside>
-          )}
-
-          <article className={styles.storyArticleCard}>
-            <div
-              className={styles.storyProse}
-              dangerouslySetInnerHTML={{ __html: post.content }}
-            />
-          </article>
+          <div className={styles.storyBodyMain}>
+            <article className={styles.storyArticleCard}>
+              <div
+                className={styles.storyProse}
+                dangerouslySetInnerHTML={{ __html: post.content }}
+              />
+            </article>
+          </div>
         </section>
 
         {relatedPosts.length > 0 && (

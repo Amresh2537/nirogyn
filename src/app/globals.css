@@ -2978,6 +2978,23 @@ footer {
   .brands-grid-clean {
     grid-template-columns: 1fr;
   }
+  .ingredients-link,
+  .brands-main-link {
+    font-size: 0.98rem;
+    white-space: normal;
+  }
+  .ingredient-clean-card {
+    border-radius: 14px;
+  }
+  .ingredient-clean-body {
+    padding: 0.9rem 0.8rem 1rem;
+  }
+  .ingredient-clean-title {
+    font-size: 1rem;
+  }
+  .ingredient-clean-desc {
+    font-size: 0.9rem;
+  }
   .brand-clean-card {
     padding: 1.5rem 1.2rem;
   }
@@ -2987,6 +3004,36 @@ footer {
   .brand-clean-desc {
     font-size: 0.99rem;
     min-height: 0;
+  }
+}
+
+@media (max-width: 520px) {
+  .ingredients-section,
+  .brands-section {
+    padding: 3.2rem 0 3.6rem;
+  }
+  .ingredients-inner,
+  .brands-shell {
+    padding: 0 0.75rem;
+  }
+  .ingredients-header-row,
+  .brands-head-row {
+    margin-bottom: 1.15rem;
+  }
+  .ingredients-title,
+  .brands-main-title {
+    font-size: clamp(1.7rem, 9.2vw, 2.4rem);
+    line-height: 1.04;
+  }
+  .ingredients-subtitle,
+  .brands-main-sub {
+    margin-top: 0.55rem;
+    font-size: 0.92rem;
+    line-height: 1.45;
+  }
+  .ingredients-grid-clean,
+  .brands-grid-clean {
+    gap: 0.75rem;
   }
 }
 

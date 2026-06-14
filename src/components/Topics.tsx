@@ -304,7 +304,7 @@ export default function Topics() {
       style={{
         position: "relative",
         background: "#f2ede6",
-        padding: "5rem 2.5rem",
+        padding: "clamp(3rem, 7vw, 5rem) clamp(1rem, 4vw, 2.5rem)",
         overflow: "hidden",
       }}
     >
@@ -330,8 +330,8 @@ export default function Topics() {
           maxWidth: "1300px",
           margin: "0 auto",
           display: "grid",
-          gridTemplateColumns: "1fr 2.5fr",
-          gap: "3.5rem",
+          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+          gap: "clamp(1.25rem, 3.5vw, 3.5rem)",
           alignItems: "start",
         }}
       >
@@ -381,7 +381,7 @@ export default function Topics() {
               lineHeight: 1.75,
               color: "#627264",
               margin: 0,
-              maxWidth: "260px",
+              maxWidth: "520px",
             }}
           >
             Science-backed wellness guides to help you understand your body better and live a healthier life.
@@ -415,7 +415,7 @@ export default function Topics() {
         {/* ── RIGHT COLUMN ── */}
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           {/* Featured large card */}
-          <div style={{ height: "300px" }}>
+          <div style={{ height: "clamp(220px, 46vw, 300px)" }}>
             <FeaturedCard topic={featuredCard} />
           </div>
 
@@ -423,7 +423,7 @@ export default function Topics() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
+              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
               gap: "1rem",
             }}
           >

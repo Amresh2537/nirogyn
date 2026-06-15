@@ -1840,8 +1840,8 @@ section { padding: 7rem 4rem; }
 
 footer {
   background: #0d1f0f;
-  padding: 5rem 4rem 2rem;
-  color: rgba(249,245,238,0.5);
+  padding: 2rem 2rem 1rem;
+  color: #f9f5ee80;
 }
 .footer-top {
   display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
@@ -1910,7 +1910,7 @@ footer {
 @media (min-width: 901px) {
   .footer-about { font-size: 1.09rem; }
   .footer-col-title { font-size: 0.93rem; }
-  .footer-links a { font-size: 1.09rem; }
+  .footer-links a { font-size: 0.8rem; }
   .footer-badge { font-size: 0.79rem; }
   .footer-bottom { font-size: 1.04rem; }
   .footer-legal a { font-size: 1.04rem; }
@@ -2216,7 +2216,7 @@ footer {
   .nl-faq-a p { padding-left: 1rem; }
   .newsletter-btn { font-size: 1rem; }
   .nl-privacy { font-size: 0.84rem; }
-  footer { padding: 4rem 1.5rem 2rem; }
+  footer { padding: 2rem 2rem 1rem; }
   .footer-about { font-size: 0.86rem; }
   .footer-col-title { font-size: 0.74rem; }
   .footer-links a { font-size: 0.86rem; }

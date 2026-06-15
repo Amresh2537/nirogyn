@@ -1014,7 +1014,6 @@
 .storyArticleCard {
   border: 1px solid rgba(20, 41, 28, 0.13);
   border-radius: 1.2rem;
-  background: #fbfaf6;
   box-shadow: 0 28px 48px -38px rgba(24, 43, 29, 0.58);
   padding: clamp(1rem, 2.9vw, 2rem);
   overflow: hidden;

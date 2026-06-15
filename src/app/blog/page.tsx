@@ -104,6 +104,8 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                     <img
                       src={post.featuredImage}
                       alt={post.featuredImageAlt || post.title}
+                      width={1200}
+                      height={630}
                       className={styles.postImage}
                     />
                   </div>

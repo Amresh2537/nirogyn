@@ -339,9 +339,9 @@
 
 .postImageContainer {
   position: relative;
-  width: 60%;
-  margin: 0.9rem auto 0;
-  aspect-ratio: 736 / 981;
+  width: 100%;
+  margin: 0;
+  aspect-ratio: 1200 / 630;
   background: linear-gradient(145deg, #e4ded2, #d4ccbb);
 }
 
@@ -362,9 +362,9 @@
 
 .postImageFallback {
   display: grid;
-  width: 60%;
-  margin: 0.9rem auto 0;
-  aspect-ratio: 736 / 981;
+  width: 100%;
+  margin: 0;
+  aspect-ratio: 1200 / 630;
   place-items: center;
   background: linear-gradient(135deg, #153c23, #264d31);
   color: #d7e7c2;
@@ -466,7 +466,7 @@
 
 .featuredImage {
   width: 100%;
-  aspect-ratio: 14 / 9;
+  aspect-ratio: 1200 / 630;
   display: block;
   object-fit: cover;
   border: 1px solid rgba(20, 41, 28, 0.13);
@@ -782,14 +782,7 @@
 
 /* ✅ CHANGED: Full width title/copy box */
 .storyCopy {
-  border: 1px solid rgba(19, 35, 23, 0.11);
-  border-radius: 1.2rem;
-  background: rgba(255, 255, 255, 0.72);
-  box-shadow: 0 24px 46px -36px rgba(12, 26, 17, 0.64);
-  backdrop-filter: blur(5px);
   padding: clamp(1rem, 2.4vw, 1.7rem);
-  width: 100%;
-  box-sizing: border-box;
 }
 
 .storyBackLink {
@@ -866,7 +859,7 @@
 .storyMediaWrap {
   width: 100%;
   max-width: 100%;
-  aspect-ratio: 736 / 981;
+  aspect-ratio: 1200 / 630;
   border: 1px solid rgba(19, 35, 23, 0.12);
   border-radius: 12px;
   background: linear-gradient(145deg, #d6d1c5, #c8c0af);
@@ -1150,7 +1143,7 @@
 .storyRelatedImageWrap {
   width: 60%;
   margin: 0.9rem auto 0;
-  aspect-ratio: 736 / 981;
+  aspect-ratio: 1200 / 630;
   background: linear-gradient(145deg, #e4ded2, #d4ccbb);
 }
 
@@ -1164,7 +1157,7 @@
 .storyRelatedFallback {
   width: 60%;
   margin: 0.9rem auto 0;
-  aspect-ratio: 736 / 981;
+  aspect-ratio: 1200 / 630;
   display: grid;
   place-items: center;
   background: linear-gradient(135deg, #153c23, #264d31);

@@ -841,9 +841,7 @@
 .storyMetaPill {
   display: inline-flex;
   align-items: center;
-  border: 1px solid rgba(31, 62, 38, 0.2);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.82);
   padding: 0.3rem 0.62rem;
   color: #284933;
   font-size: 0.72rem;

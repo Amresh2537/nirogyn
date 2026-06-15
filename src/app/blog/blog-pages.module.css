@@ -339,32 +339,32 @@
 
 .postImageContainer {
   position: relative;
-  width: 100%;
-  aspect-ratio: 14 / 9;
-  overflow: hidden;
+  width: 60%;
+  margin: 0.9rem auto 0;
+  aspect-ratio: 736 / 981;
+  background: linear-gradient(145deg, #e4ded2, #d4ccbb);
 }
 
 .postImage {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center;
+  object-fit: contain;
   display: block;
 }
 
 .postImageListing {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center;
+  object-fit: contain;
   padding: 0;
   display: block;
 }
 
 .postImageFallback {
   display: grid;
-  width: 100%;
-  aspect-ratio: 14 / 9;
+  width: 60%;
+  margin: 0.9rem auto 0;
+  aspect-ratio: 736 / 981;
   place-items: center;
   background: linear-gradient(135deg, #153c23, #264d31);
   color: #d7e7c2;
@@ -674,6 +674,10 @@
     grid-column: span 6;
   }
 
+  .storyRelatedCard {
+    grid-column: span 6;
+  }
+
   .commentsGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -681,6 +685,10 @@
 
 @media (min-width: 1080px) {
   .postCard {
+    grid-column: span 4;
+  }
+
+  .storyRelatedCard {
     grid-column: span 4;
   }
 
@@ -858,10 +866,9 @@
 .storyMediaWrap {
   width: 100%;
   max-width: 100%;
-  aspect-ratio: 21 / 9;
-  overflow: hidden;
+  aspect-ratio: 736 / 981;
   border: 1px solid rgba(19, 35, 23, 0.12);
-  border-radius: 1.2rem;
+  border-radius: 12px;
   background: linear-gradient(145deg, #d6d1c5, #c8c0af);
   box-shadow: 0 28px 48px -34px rgba(12, 26, 17, 0.62);
   margin-top: 0;
@@ -870,14 +877,14 @@
 .storyMediaImage {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center;
+  object-fit: contain;
   display: block;
+  border-radius: 12px;
 }
 
 .storyMediaFallback {
-  height: 100%;
-  min-height: 0;
+  min-height: 120px;
+  padding: 1.1rem;
   display: grid;
   place-items: center;
   color: #445648;
@@ -894,6 +901,13 @@
   align-items: start;
 }
 
+.postLayout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
 /* ✅ NEW: Wrapper to stack image + article card in the main column */
 .storyBodyMain {
   display: flex;
@@ -907,6 +921,8 @@
   gap: 1rem;
   min-width: 0;
   align-self: start;
+  position: sticky;
+  top: 6rem;
 }
 
 .storyRail {
@@ -935,6 +951,64 @@
 
 .storyRailList li + li {
   margin-top: 0.48rem;
+}
+
+.storySidebarCard {
+  border: 1px solid rgba(26, 49, 34, 0.12);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.74);
+  padding: 1rem;
+}
+
+.storySidebarLabel {
+  margin: 0 0 0.72rem;
+  color: #1b3a27;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.storySidebarLink {
+  display: block;
+}
+
+.storySidebarImageWrap {
+  width: 100%;
+}
+
+.storySidebarImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.storySidebarImageFallback {
+  width: 100%;
+  border: 1px solid rgba(20, 41, 28, 0.12);
+  border-radius: 12px;
+  background: linear-gradient(135deg, #153c23, #264d31);
+  color: #d7e7c2;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 1.1rem;
+}
+
+.storySidebarTitle {
+  margin: 0.75rem 0 0;
+  color: #132418;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.storySidebarExcerpt {
+  margin: 0.5rem 0 0;
+  color: #536356;
+  font-size: 0.9rem;
+  line-height: 1.55;
 }
 
 .storyArticleCard {
@@ -1050,56 +1124,61 @@
 
 .storyRelatedGrid {
   display: grid;
-  gap: 1rem;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 1.25rem;
+  row-gap: 2.5rem;
 }
 
 .storyRelatedCard {
+  grid-column: span 12;
   display: flex;
   flex-direction: column;
+  width: 100%;
   border: 1px solid rgba(20, 41, 28, 0.13);
-  border-radius: 1.1rem;
+  border-radius: 1.25rem;
   overflow: hidden;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), #f9f7f3);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), #f9f7f3);
   box-shadow: 0 18px 36px -28px rgba(24, 44, 28, 0.55);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .storyRelatedCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 24px 44px -28px rgba(24, 44, 28, 0.45);
+  transform: translateY(-3px);
+  border-color: rgba(20, 41, 28, 0.25);
+  box-shadow: 0 26px 48px -26px rgba(24, 44, 28, 0.46);
 }
 
 .storyRelatedImageWrap {
-  width: 100%;
-  aspect-ratio: 14 / 9;
-  overflow: hidden;
+  width: 60%;
+  margin: 0.9rem auto 0;
+  aspect-ratio: 736 / 981;
+  background: linear-gradient(145deg, #e4ded2, #d4ccbb);
 }
 
 .storyRelatedImage {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center;
+  object-fit: contain;
   display: block;
 }
 
 .storyRelatedFallback {
-  width: 100%;
-  aspect-ratio: 14 / 9;
+  width: 60%;
+  margin: 0.9rem auto 0;
+  aspect-ratio: 736 / 981;
   display: grid;
   place-items: center;
   background: linear-gradient(135deg, #153c23, #264d31);
   color: #d7e7c2;
-  font-size: 0.92rem;
-  font-weight: 700;
+  font-size: 2rem;
 }
 
 .storyRelatedContent {
   display: flex;
-  min-height: 9rem;
+  min-height: 9.5rem;
   flex: 1;
   flex-direction: column;
-  padding: 1.15rem;
+  padding: 1.3rem 1.25rem 1.2rem;
 }
 
 .storyRelatedCategory {
@@ -1112,19 +1191,23 @@
 }
 
 .storyRelatedCardTitle {
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.55rem;
   color: #132418;
-  font-size: 1.2rem;
-  line-height: 1.3;
+  font-size: 1.34rem;
+  line-height: 1.35;
+}
+
+.storyRelatedCard:hover .storyRelatedCardTitle {
+  color: #254d31;
 }
 
 .storyRelatedExcerpt {
   display: -webkit-box;
-  margin-top: 0.45rem;
+  margin-top: 0.72rem;
   overflow: hidden;
   color: #536356;
-  font-size: 0.98rem;
-  line-height: 1.62;
+  font-size: 1.04rem;
+  line-height: 1.72;
   line-clamp: 3;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
@@ -1137,7 +1220,7 @@
   align-items: center;
   gap: 0.34rem;
   color: #68786c;
-  font-size: 0.74rem;
+  font-size: 0.75rem;
   font-weight: 600;
 }
 
@@ -1238,30 +1321,20 @@
 
 /* ✅ CHANGED: storyHeroGrid 2-col override REMOVED — stays single column */
 @media (min-width: 860px) {
-  .storyBodyShell {
-    grid-template-columns: minmax(0, 0.34fr) minmax(0, 1fr);
-    gap: 1.4rem;
+  .storyCommentsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .postLayout {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
   }
 
   .storyRailColumn {
-    position: sticky;
-    top: 6.2rem;
-    height: calc(100vh - 7rem);
-  }
-
-  .storyRailColumn .storyMediaWrap {
-    flex: 1;
-    height: 100%;
-    min-height: 280px;
-    aspect-ratio: auto;
-  }
-
-  .storyRelatedGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .storyCommentsGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    position: static;
+    top: auto;
   }
 }
 
@@ -1285,11 +1358,6 @@
 
   .storyMetaPill {
     font-size: 0.68rem;
-  }
-
-  .storyMediaWrap,
-  .storyMediaFallback {
-    aspect-ratio: 16 / 9;
   }
 
   .storyProse p:first-of-type::first-letter {

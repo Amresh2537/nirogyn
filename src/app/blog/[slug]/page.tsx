@@ -78,7 +78,7 @@ export default async function DynamicBlogPost({ params }: Props) {
           </div>
         </section>
 
-        <section className={styles.storyBodyShell}>
+        <section className={`${styles.storyBodyShell} ${styles.postLayout}`}>
           <div className={styles.storyRailColumn}>
             {articleHeadings.length > 0 && (
               <aside className={styles.storyRail}>
@@ -125,29 +125,29 @@ export default async function DynamicBlogPost({ params }: Props) {
               <h2 className={styles.storyRelatedTitle}>Related in {post.category || "Wellness"}</h2>
               <div className={styles.storyRelatedGrid}>
                 {relatedPosts.map((item) => (
-                  <Link key={item.id} href={`/blog/${item.slug}`} className={styles.storyRelatedCard}>
+                  <Link key={item.id} href={`/blog/${item.slug}`} className={styles.postCard}>
                     {item.featuredImage ? (
-                      <div className={styles.storyRelatedImageWrap}>
+                      <div className={styles.postImageContainer}>
                         <OptionalImage
                           src={item.featuredImage}
                           alt={item.featuredImageAlt || item.title}
                           width={1400}
                           height={900}
-                          className={styles.storyRelatedImage}
+                          className={styles.postImage}
                         />
                       </div>
                     ) : (
-                      <div className={styles.storyRelatedFallback}>No image</div>
+                      <div className={styles.postImageFallback}>No image</div>
                     )}
-                    <div className={styles.storyRelatedContent}>
-                      {item.category && <span className={styles.storyRelatedCategory}>{item.category}</span>}
-                      <h3 className={styles.storyRelatedCardTitle}>{item.title}</h3>
-                      {item.excerpt && <p className={styles.storyRelatedExcerpt}>{item.excerpt}</p>}
-                      <div className={styles.storyRelatedMeta}>
+                    <div className={styles.postContent}>
+                      {item.category && <span className={styles.postCategory}>{item.category}</span>}
+                      <h3 className={styles.postCardTitle}>{item.title}</h3>
+                      {item.excerpt && <p className={styles.postCardExcerpt}>{item.excerpt}</p>}
+                      <div className={styles.postMeta}>
                         <span>{item.author}</span>
                         {item.readTime && (
                           <>
-                            <span className={styles.storyRelatedDot}>·</span>
+                            <span className={styles.metaDot}>·</span>
                             <span>{item.readTime}</span>
                           </>
                         )}

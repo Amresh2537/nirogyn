@@ -750,7 +750,7 @@
 .storyHero {
   position: relative;
   overflow: hidden;
-  padding: clamp(2rem, 4.8vw, 3.8rem) 1.25rem 1.4rem;
+  padding: clamp(3.2rem, 4.8vw, 3.8rem) 1.25rem 1.4rem;
   background:
     radial-gradient(95% 78% at 12% 0%, rgba(167, 185, 130, 0.34) 0%, rgba(167, 185, 130, 0) 52%),
     linear-gradient(145deg, #f5f1e8 0%, #eee5d7 45%, #ece8df 100%);

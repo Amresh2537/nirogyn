@@ -370,8 +370,8 @@ export default function Navbar({ solid = false }: NavbarProps) {
                 href="/ask"
                 className={`h-[38px] shrink-0 rounded-full px-3.5 text-[0.78rem] font-semibold no-underline inline-flex items-center justify-center whitespace-nowrap cursor-pointer transition-all ${
                   useLightNav
-                    ? "bg-[#f7f8f7] text-[#1f5a2a] border border-[rgba(16,63,34,0.2)]"
-                    : "bg-gradient-to-r from-[#245c2f] to-[#3f874a] text-[#b8f4a2] border border-transparent"
+                    ? "border border-[rgba(16,63,34,0.2)] bg-white/95 text-[#1a3c1e] shadow-[0_2px_10px_rgba(16,63,34,0.06)]"
+                    : "border border-white/35 bg-black/25 text-white backdrop-blur-md shadow-[0_2px_12px_rgba(0,0,0,0.16)]"
                 }`}
               >
                 ✦ Ask Niro

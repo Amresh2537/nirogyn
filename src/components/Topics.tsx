@@ -97,6 +97,7 @@ function FeaturedCard({ topic }: { topic: (typeof TOPIC_CARDS)[0] }) {
         minHeight: "260px",
         display: "flex",
         flexDirection: "column",
+        
       }}
     >
       {/* Background image */}
@@ -423,9 +424,9 @@ export default function Topics() {
         </div>
 
         {/* ── RIGHT COLUMN ── */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: isMobile ? "1.5rem" : "1rem" }}>
           {/* Featured large card */}
-          <div style={{ height: isMobile ? "240px" : "300px" }}>
+          <div style={{ height: isMobile ? "auto" : "300px" }}>
             <FeaturedCard topic={featuredCard} />
           </div>
 

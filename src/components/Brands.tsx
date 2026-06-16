@@ -1,9 +1,18 @@
 import Link from "next/link";
 
-const BRANDS = [
+type Brand = {
+  name: string;
+  desc: string;
+  link: string;
+  href: string;
+  sub?: string;
+  accent?: string;
+};
+
+const BRANDS: Brand[] = [
   {
     name: "ISOCHIA",
-    sub: "NIROGYN",
+    
     desc: "Daily fiber for smooth digestion & gut health.",
     link: "Explore ISOCHIA",
     href: "/brands/isochia",
@@ -45,7 +54,7 @@ export default function Brands() {
           {BRANDS.map((brand) => (
             <article className="brand-clean-card" key={brand.name}>
               <h3 className={`brand-clean-name ${brand.accent ?? ""}`}>{brand.name}</h3>
-              {brand.sub ? <p className="brand-clean-sub">{brand.sub}</p> : <div className="brand-clean-spacer" />}
+              {brand.name !== "ISOCHIA" && brand.sub ? <p className="brand-clean-sub">{brand.sub}</p> : <div className="brand-clean-spacer" />}
               <p className="brand-clean-desc">{brand.desc}</p>
               <Link href={brand.href} className="brand-clean-link">{brand.link} →</Link>
             </article>

@@ -109,7 +109,7 @@ nav.scrolled .nav-logo { color: var(--forest); }
   padding: 0 0.85rem;
   color: #49594b;
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 0.2rem;
   font-weight: 600;
   letter-spacing: 0.02em;
   border-radius: 8px;
@@ -141,7 +141,7 @@ nav.scrolled .nav-logo { color: var(--forest); }
   height: 54px;
   width: clamp(280px, 22vw, 380px);
   border-radius: 999px;
-  border: 2px solid rgba(16,63,34,0.8);
+  border: 1.5px solid rgba(16,63,34,0.8);
   background: #fff;
   overflow: hidden;
 }
@@ -158,7 +158,7 @@ nav.scrolled .nav-logo { color: var(--forest); }
 }
 .nav-search input::placeholder { color: rgba(64,79,66,0.62); }
 .nav-search button {
-  width: 56px;
+  width: 26px;
   height: 100%;
   border: none;
   border-radius: 0;
@@ -179,7 +179,7 @@ nav.scrolled .nav-search input::placeholder { color: rgba(64,79,66,0.62); }
 .nav-ask-btn {
   height: 54px;
   border-radius: 999px;
-  border: 2px solid transparent;
+  border: 1.5px solid transparent;
   background:
     linear-gradient(#f7f8f7, #f7f8f7) padding-box,
     linear-gradient(90deg, #5676c6 0%, #3d8e88 100%) border-box;
@@ -1650,7 +1650,7 @@ section { padding: 7rem 4rem; }
   background: linear-gradient(135deg, #2a5c2e, #1a3c1e);
   border: 1px solid rgba(126,200,90,0.3);
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.1rem; flex-shrink: 0;
+  font-size: 1.2rem; flex-shrink: 0;
 }
 .chat-header-info { flex: 1; }
 .chat-header-name {

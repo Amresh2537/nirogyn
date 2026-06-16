@@ -120,7 +120,7 @@ export default function Navbar({ solid = false }: NavbarProps) {
         onFocusCapture={() => setIsVisible(true)}
         className={`
           fixed left-0 right-0 z-[129] grid items-center
-          ${isMobile ? "gap-1.5 px-2 py-2" : "gap-3 px-7 py-4"}
+          ${isMobile ? "gap-1.5 px-3 py-2" : "gap-3 px-7 py-4"}
           transition-[transform,opacity,background-color,border-color,backdrop-filter] duration-300 ease-in-out
           ${isVisible ? "opacity-100" : "opacity-0 pointer-events-none"}
           ${isMobile ? "grid-cols-[40px_minmax(0,1fr)_40px]" : "grid-cols-[1fr_auto_1fr]"}
@@ -252,11 +252,11 @@ export default function Navbar({ solid = false }: NavbarProps) {
                 <a
                   key={item.label}
                   href={item.href}
-                  className={`no-underline px-3 py-1 text-[1.1rem] tracking-[0.02em] leading-none font-normal ${
+                  className={`no-underline px-3 py-1 text-[1.02rem] tracking-[0.02em] leading-none font-normal ${
                     useLightNav ? "text-[#1a3c1e]" : "text-white"
                   }`}
                   style={{
-                    fontSize: "1.1rem",
+                    fontSize: "1rem",
                   }}
                 >
                   {item.label}
@@ -279,7 +279,7 @@ export default function Navbar({ solid = false }: NavbarProps) {
         {/* Right section */}
         <div
           className={`flex items-center justify-self-end ${
-            isMobile ? "gap-2" : "gap-5"
+            isMobile ? "gap-2" : "gap-3"
           }`}
         >
           {!isMobile && (
@@ -287,27 +287,27 @@ export default function Navbar({ solid = false }: NavbarProps) {
               <form
                 action="/blog"
                 method="get"
-                className={`relative flex items-center h-[clamp(45px,3.5vw,32px)] w-[clamp(250px,20vw,360px)] rounded-full overflow-hidden ${
+                className={`relative flex items-center h-[36px] w-[220px] shrink-0 rounded-full overflow-hidden transition-all ${
                   useLightNav
-                    ? "border-2 border-[rgba(16,63,34,0.8)] bg-white"
-                    : "border-2 border-[rgba(255,255,255,0.78)] bg-black/20"
+                    ? "border border-[rgba(16,63,34,0.16)] bg-white/95 shadow-[0_2px_8px_rgba(16,63,34,0.06)]"
+                    : "border border-[rgba(255,255,255,0.35)] bg-black/25 backdrop-blur-sm shadow-[0_2px_10px_rgba(0,0,0,0.14)]"
                 }`}
               >
                 <input
                   type="search"
                   name="q"
-                  placeholder="Search"
+                  placeholder="Search Articles"
                   aria-label="Search"
-                  className={`w-full h-full border-none bg-transparent outline-none text-center placeholder:text-center text-[1.2rem] !mr-[10rem] font-medium px-5 pr-[50px] ${
+                  className={`w-full h-full border-none bg-transparent outline-none pl-1 pr-9 text-[0.85rem] placeholder:text-[0.78rem] font-medium ${
                     useLightNav
-                      ? "text-black placeholder:text-black/70"
+                      ? "text-black placeholder:text-black/65"
                       : "text-white placeholder:text-white/70"
                   }`}
                 />
                 <button
                   type="submit"
                   aria-label="Search"
-                  className={`absolute right-[15px] top-1/2 -translate-y-1/2 border-none bg-transparent text-[1.6rem] leading-none font-medium cursor-pointer ${
+                  className={`absolute right-3 top-1/2 -translate-y-1/2 border-none bg-transparent text-[0.95rem] leading-none font-medium cursor-pointer ${
                     useLightNav ? "text-[#1a3c1e]" : "text-white"
                   }`}
                 >
@@ -317,10 +317,10 @@ export default function Navbar({ solid = false }: NavbarProps) {
 
               <Link
                 href="/ask"
-                className={`min-w-[clamp(118px,11vw,164px)] h-[clamp(44px,3.5vw,42px)] rounded-full border-2 border-transparent px-[clamp(16px,1.7vw,27px)] text-[clamp(0.86rem,0.88vw,0.95rem)] font-semibold no-underline inline-flex items-center justify-center whitespace-nowrap cursor-pointer ${
+                className={`h-[36px] min-w-[124px] shrink-0 rounded-full border px-5 text-[0.85rem] font-semibold no-underline inline-flex items-center justify-center whitespace-nowrap cursor-pointer transition-all ${
                   useLightNav
-                    ? "bg-[#f7f8f7] text-[#1f5a2a]"
-                    : "bg-gradient-to-r from-[#245c2f] to-[#3f874a] text-[#b8f4a2]"
+                    ? "bg-[#f7f8f7] text-[#1f5a2a] border-[rgba(16,63,34,0.22)] hover:bg-white"
+                    : "bg-gradient-to-r from-[#245c2f] to-[#3f874a] text-[#b8f4a2] border-transparent hover:brightness-110"
                 }`}
               >
                 ✦ Ask Niro
@@ -331,6 +331,54 @@ export default function Navbar({ solid = false }: NavbarProps) {
             <div className="h-[40px] w-[40px]" aria-hidden="true" />
           )}
         </div>
+
+        {isMobile && (
+          <div className="col-span-3 mt-2 flex justify-center">
+            <div className="flex w-full items-center justify-center gap-2">
+              <form
+                action="/blog"
+                method="get"
+                className={`relative flex h-[38px] flex-1 min-w-0 items-center rounded-full overflow-hidden transition-all ${
+                  useLightNav
+                    ? "border border-[rgba(16,63,34,0.2)] bg-white/95 shadow-[0_2px_10px_rgba(16,63,34,0.06)]"
+                    : "border border-white/35 bg-black/25 backdrop-blur-md shadow-[0_2px_12px_rgba(0,0,0,0.16)]"
+                }`}
+              >
+                <input
+                  type="search"
+                  name="q"
+                  placeholder="Search Articles"
+                  aria-label="Search"
+                  className={`h-full w-full border-none bg-transparent outline-none pl-3 pr-8 text-[0.8rem] placeholder:text-[0.78rem] font-medium ${
+                    useLightNav
+                      ? "text-[#1a3c1e] placeholder:text-[#1a3c1e]/65"
+                      : "text-white placeholder:text-white/72"
+                  }`}
+                />
+                <button
+                  type="submit"
+                  aria-label="Search"
+                  className={`absolute right-2.5 top-1/2 -translate-y-1/2 border-none bg-transparent text-[0.9rem] leading-none font-medium cursor-pointer ${
+                    useLightNav ? "text-[#1a3c1e]" : "text-white"
+                  }`}
+                >
+                  ⌕
+                </button>
+              </form>
+
+              <Link
+                href="/ask"
+                className={`h-[38px] shrink-0 rounded-full px-3.5 text-[0.78rem] font-semibold no-underline inline-flex items-center justify-center whitespace-nowrap cursor-pointer transition-all ${
+                  useLightNav
+                    ? "bg-[#f7f8f7] text-[#1f5a2a] border border-[rgba(16,63,34,0.2)]"
+                    : "bg-gradient-to-r from-[#245c2f] to-[#3f874a] text-[#b8f4a2] border border-transparent"
+                }`}
+              >
+                ✦ Ask Niro
+              </Link>
+            </div>
+          </div>
+        )}
       </nav>
       {solid && <div aria-hidden="true" className="h-[56px] md:h-[72px]" />}
     </>

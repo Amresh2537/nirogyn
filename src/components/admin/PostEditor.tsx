@@ -1,8 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ClipboardEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Link2 } from "lucide-react";
+import { marked } from "marked";
+import DOMPurify from "dompurify";
+import TurndownService from "turndown";
+import { gfm } from "turndown-plugin-gfm";
 
 interface PostForm {
   title: string;
@@ -44,17 +49,98 @@ interface Props {
   postId?: string;
 }
 
+marked.setOptions({
+  gfm: true,
+  breaks: true,
+});
+
+const turndownService = new TurndownService({
+  headingStyle: "atx",
+  bulletListMarker: "-",
+  codeBlockStyle: "fenced",
+  emDelimiter: "_",
+  strongDelimiter: "**",
+  linkStyle: "inlined",
+});
+
+turndownService.use(gfm);
+
+const TOOLBAR_ACTIONS = [
+  { label: "H1", title: "Heading 1", prefix: "# ", suffix: "" },
+  { label: "H2", title: "Heading 2", prefix: "## ", suffix: "" },
+  { label: "H3", title: "Heading 3", prefix: "### ", suffix: "" },
+  { label: "B", title: "Bold", prefix: "**", suffix: "**" },
+  { label: "I", title: "Italic", prefix: "_", suffix: "_" },
+  { label: "- List", title: "Bullet list", prefix: "- ", suffix: "" },
+  { label: "HR", title: "Horizontal rule", prefix: "\n---\n", suffix: "" },
+  { label: "> Quote", title: "Blockquote", prefix: "> ", suffix: "" },
+  { label: "`Code`", title: "Inline code", prefix: "`", suffix: "`" },
+];
+
+const ALLOWED_TAGS = [
+  "h1", "h2", "h3", "h4", "h5", "h6",
+  "p", "br", "hr",
+  "strong", "b", "em", "i", "u", "s", "del",
+  "a", "blockquote", "pre", "code",
+  "ul", "ol", "li",
+  "table", "thead", "tbody", "tr", "th", "td",
+  "img", "figure", "figcaption",
+  "div", "span",
+];
+
+const ALLOWED_ATTR = ["href", "target", "rel", "src", "alt", "class", "id", "title"];
+
+function looksLikeHtml(value: string): boolean {
+  return /<\/?[a-z][\s\S]*>/i.test(value);
+}
+
+function markdownFromStoredContent(content: string): string {
+  const trimmed = (content || "").trim();
+  if (!trimmed) return "";
+  if (!looksLikeHtml(trimmed)) return trimmed;
+
+  try {
+    return turndownService.turndown(trimmed).replace(/\n{3,}/g, "\n\n").trim();
+  } catch {
+    return trimmed;
+  }
+}
+
+function renderFormattedHtml(content: string): string {
+  const trimmed = (content || "").trim();
+  const rawHtml = looksLikeHtml(trimmed)
+    ? trimmed
+    : ((marked.parse(trimmed) as string) || "");
+
+  if (typeof window === "undefined") {
+    // DOMPurify needs a real DOM; skip on the server SSR pass.
+    // This re-runs (and sanitizes properly) once mounted in the browser.
+    return rawHtml;
+  }
+
+  return DOMPurify.sanitize(rawHtml, {
+    ALLOWED_TAGS: ALLOWED_TAGS,
+    ALLOWED_ATTR: ALLOWED_ATTR,
+    FORCE_BODY: true,
+  });
+}
+
 export default function PostEditor({ postId }: Props) {
   const router = useRouter();
-  const editorRef = useRef<HTMLDivElement>(null);
+  const editorRef = useRef<HTMLTextAreaElement>(null);
+  const selectionRef = useRef<{ start: number; end: number }>({ start: 0, end: 0 });
   const [form, setForm] = useState<PostForm>(EMPTY);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [loadError, setLoadError] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [uploadError, setUploadError] = useState("");
+  const [linkDialog, setLinkDialog] = useState(false);
+  const [linkText, setLinkText] = useState("");
+  const [linkUrl, setLinkUrl] = useState("");
 
   const isEdit = !!postId;
+  const renderedPreviewHtml = useMemo(() => renderFormattedHtml(form.content), [form.content]);
 
   // Load existing post
   useEffect(() => {
@@ -79,11 +165,8 @@ export default function PostEditor({ postId }: Props) {
           seoTitle: post.seoTitle ?? post.title,
           seoDescription: post.seoDescription ?? post.excerpt,
           readTime: post.readTime ?? "",
-          content: post.content,
+          content: markdownFromStoredContent(post.content ?? ""),
         });
-        if (editorRef.current) {
-          editorRef.current.innerHTML = post.content;
-        }
       });
   }, [postId]);
 
@@ -98,18 +181,78 @@ export default function PostEditor({ postId }: Props) {
     });
   }
 
-  // Toolbar command
-  function exec(command: string, value?: string) {
-    document.execCommand(command, false, value);
-    editorRef.current?.focus();
+  function insertAtSelection(insertedText: string, start: number, end: number) {
+    const editor = editorRef.current;
+    const before = form.content.substring(0, start);
+    const after = form.content.substring(end);
+    const nextContent = before + insertedText + after;
+    setForm((prev) => ({ ...prev, content: nextContent }));
+
+    requestAnimationFrame(() => {
+      if (!editor) return;
+      editor.focus();
+      const caret = start + insertedText.length;
+      editor.selectionStart = caret;
+      editor.selectionEnd = caret;
+    });
   }
 
-  function insertHeading(tag: string) {
-    exec("formatBlock", tag);
+  function applyFormat(prefix: string, suffix: string) {
+    const editor = editorRef.current;
+    if (!editor) return;
+
+    const start = editor.selectionStart;
+    const end = editor.selectionEnd;
+    const selected = form.content.substring(start, end);
+    const before = form.content.substring(0, start);
+    const after = form.content.substring(end);
+    const nextContent = before + prefix + selected + suffix + after;
+    setForm((prev) => ({ ...prev, content: nextContent }));
+
+    requestAnimationFrame(() => {
+      editor.focus();
+      const newCursor = start + prefix.length + selected.length + suffix.length;
+      editor.selectionStart = suffix ? start + prefix.length : newCursor;
+      editor.selectionEnd = suffix ? start + prefix.length + selected.length : newCursor;
+    });
   }
 
-  function handleEditorInput() {
-    setForm((prev) => ({ ...prev, content: editorRef.current?.innerHTML ?? "" }));
+  function openLinkDialog() {
+    const editor = editorRef.current;
+    if (!editor) return;
+
+    selectionRef.current = { start: editor.selectionStart, end: editor.selectionEnd };
+    const selectedText = form.content.substring(editor.selectionStart, editor.selectionEnd);
+    setLinkText(selectedText || "");
+    setLinkUrl("");
+    setLinkDialog(true);
+  }
+
+  function insertLink() {
+    const { start, end } = selectionRef.current;
+    const text = linkText.trim() || "link text";
+    const url = linkUrl.trim() || "https://";
+    insertAtSelection(`[${text}](${url})`, start, end);
+    setLinkDialog(false);
+    setLinkText("");
+    setLinkUrl("");
+  }
+
+  function handlePaste(event: ClipboardEvent<HTMLTextAreaElement>) {
+    const html = event.clipboardData.getData("text/html");
+    if (!html) return;
+
+    event.preventDefault();
+    const markdown = turndownService
+      .turndown(html)
+      .replace(/\n{3,}/g, "\n\n")
+      .trim();
+
+    if (!markdown) return;
+
+    const editor = editorRef.current;
+    if (!editor) return;
+    insertAtSelection(markdown, editor.selectionStart, editor.selectionEnd);
   }
 
   async function handleImageUpload(file: File | null) {
@@ -146,13 +289,12 @@ export default function PostEditor({ postId }: Props) {
   }
 
   async function handleSave(statusOverride?: "draft" | "published") {
-    const content = editorRef.current?.innerHTML ?? "";
     const payload: PostForm = {
       ...form,
       seoTitle: form.seoTitle || form.title,
       seoDescription: form.seoDescription || form.excerpt,
       featuredImageAlt: form.featuredImageAlt || form.title,
-      content,
+      content: renderFormattedHtml(form.content),
     };
     if (statusOverride) payload.status = statusOverride;
 
@@ -298,54 +440,136 @@ export default function PostEditor({ postId }: Props) {
             {/* Content Editor */}
             <div className="admin-card">
               <h2 className="admin-card-title">Content</h2>
+              <p className="editor-helper-text">
+                Write in markdown and use the toolbar shortcuts. Pasting rich text from ChatGPT, Docs, or Word is supported.
+              </p>
 
-              {/* Toolbar */}
-              <div className="editor-toolbar">
-                <div className="toolbar-group">
-                  <button type="button" className="toolbar-btn" title="Bold" onClick={() => exec("bold")}><b>B</b></button>
-                  <button type="button" className="toolbar-btn" title="Italic" onClick={() => exec("italic")}><i>I</i></button>
-                  <button type="button" className="toolbar-btn" title="Underline" onClick={() => exec("underline")}><u>U</u></button>
-                  <button type="button" className="toolbar-btn" title="Strikethrough" onClick={() => exec("strikeThrough")}><s>S</s></button>
+              <div className="editor-shell">
+                <div className="editor-toolbar">
+                  <div className="toolbar-group">
+                    {TOOLBAR_ACTIONS.map((action) => (
+                      <button
+                        key={action.label}
+                        type="button"
+                        className="toolbar-btn toolbar-btn--label"
+                        title={action.title}
+                        onMouseDown={(event) => {
+                          event.preventDefault();
+                          applyFormat(action.prefix, action.suffix);
+                        }}
+                      >
+                        {action.label}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="toolbar-divider" />
+                  <div className="toolbar-group">
+                    <button
+                      type="button"
+                      className="toolbar-btn toolbar-btn--label"
+                      title="Insert hyperlink"
+                      onMouseDown={(event) => {
+                        event.preventDefault();
+                        openLinkDialog();
+                      }}
+                    >
+                      <Link2 size={12} />
+                      Link
+                    </button>
+                  </div>
                 </div>
-                <div className="toolbar-divider" />
-                <div className="toolbar-group">
-                  <button type="button" className="toolbar-btn toolbar-btn--label" onClick={() => insertHeading("h1")}>H1</button>
-                  <button type="button" className="toolbar-btn toolbar-btn--label" onClick={() => insertHeading("h2")}>H2</button>
-                  <button type="button" className="toolbar-btn toolbar-btn--label" onClick={() => insertHeading("h3")}>H3</button>
-                  <button type="button" className="toolbar-btn toolbar-btn--label" onClick={() => exec("formatBlock", "p")}>P</button>
-                </div>
-                <div className="toolbar-divider" />
-                <div className="toolbar-group">
-                  <button type="button" className="toolbar-btn" title="Bullet list" onClick={() => exec("insertUnorderedList")}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/><circle cx="4" cy="6" r="1.5" fill="currentColor"/><circle cx="4" cy="12" r="1.5" fill="currentColor"/><circle cx="4" cy="18" r="1.5" fill="currentColor"/></svg>
-                  </button>
-                  <button type="button" className="toolbar-btn" title="Numbered list" onClick={() => exec("insertOrderedList")}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><text x="2" y="8" fontSize="7" fill="currentColor">1.</text><text x="2" y="14" fontSize="7" fill="currentColor">2.</text><text x="2" y="20" fontSize="7" fill="currentColor">3.</text></svg>
-                  </button>
-                  <button type="button" className="toolbar-btn" title="Blockquote" onClick={() => exec("formatBlock", "blockquote")}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1zm12 0c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
-                  </button>
-                </div>
-                <div className="toolbar-divider" />
-                <div className="toolbar-group">
-                  <button type="button" className="toolbar-btn" title="Undo" onClick={() => exec("undo")}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg>
-                  </button>
-                  <button type="button" className="toolbar-btn" title="Redo" onClick={() => exec("redo")}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 14 20 9 15 4"/><path d="M4 20v-7a4 4 0 0 1 4-4h12"/></svg>
-                  </button>
+
+                <textarea
+                  ref={editorRef}
+                  className="editor-body"
+                  value={form.content}
+                  onChange={(event) => set("content", event.target.value)}
+                  onPaste={handlePaste}
+                  rows={16}
+                  placeholder={"Write content in markdown...\n\n# Heading\n## Sub-heading\n**bold text**\n_italic text_\n[link text](https://example.com)\n- bullet point"}
+                  style={{
+                    width: "100%",
+                    resize: "vertical",
+                    fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+                  }}
+                />
+
+                <div className="editor-footer-note">Live preview</div>
+
+                <div
+                  className="editor-body"
+                  style={{ minHeight: "220px" }}
+                  dangerouslySetInnerHTML={{ __html: renderedPreviewHtml }}
+                />
+
+                <div className="editor-footer-note">
+                  Markdown toolbar, safe HTML sanitization, and rich-text paste conversion are enabled.
                 </div>
               </div>
 
-              {/* Editable content area */}
-              <div
-                ref={editorRef}
-                className="editor-body"
-                contentEditable
-                suppressContentEditableWarning
-                onInput={handleEditorInput}
-                data-placeholder="Write your blog post content here, or paste from Google Docs / Word…"
-              />
+              {linkDialog && (
+                <div
+                  style={{
+                    position: "fixed",
+                    inset: 0,
+                    zIndex: 50,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background: "rgba(0, 0, 0, 0.5)",
+                    padding: "1rem",
+                  }}
+                  onClick={() => setLinkDialog(false)}
+                >
+                  <div
+                    className="admin-card"
+                    style={{ width: "100%", maxWidth: "420px" }}
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    <h3 className="admin-card-title" style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                      <Link2 size={16} /> Insert Link
+                    </h3>
+                    <div className="admin-field">
+                      <label className="admin-label">Link Text</label>
+                      <input
+                        type="text"
+                        className="admin-input"
+                        placeholder="e.g. Read more"
+                        value={linkText}
+                        onChange={(event) => setLinkText(event.target.value)}
+                        autoFocus
+                      />
+                    </div>
+                    <div className="admin-field">
+                      <label className="admin-label">URL</label>
+                      <input
+                        type="url"
+                        className="admin-input"
+                        placeholder="https://example.com"
+                        value={linkUrl}
+                        onChange={(event) => setLinkUrl(event.target.value)}
+                        onKeyDown={(event) => {
+                          if (event.key === "Enter") insertLink();
+                          if (event.key === "Escape") setLinkDialog(false);
+                        }}
+                      />
+                    </div>
+                    <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
+                      <button type="button" className="admin-btn-secondary" onClick={() => setLinkDialog(false)}>
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        className="admin-btn-primary"
+                        disabled={!linkUrl.trim()}
+                        onClick={insertLink}
+                      >
+                        Insert
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

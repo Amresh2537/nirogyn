@@ -24,6 +24,22 @@ function stripHtml(value: string): string {
   return value.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim();
 }
 
+function addLeadParagraphClass(content: string): string {
+  return content.replace(/<p(\s[^>]*)?>/, (match) => {
+    if (/class=/.test(match)) {
+      return match.replace(/class=("|')(.*?)\1/, (_full, quote: string, classNames: string) => {
+        if (classNames.split(/\s+/).includes(styles.storyLeadParagraph)) {
+          return `class=${quote}${classNames}${quote}`;
+        }
+
+        return `class=${quote}${classNames} ${styles.storyLeadParagraph}${quote}`;
+      });
+    }
+
+    return `<p class="${styles.storyLeadParagraph}"${match.slice(2)}`;
+  });
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
@@ -113,7 +129,7 @@ export default async function DynamicBlogPost({ params }: Props) {
             <article className={styles.storyArticleCard}>
               <div
                 className={styles.storyProse}
-                dangerouslySetInnerHTML={{ __html: post.content }}
+                dangerouslySetInnerHTML={{ __html: addLeadParagraphClass(post.content) }}
               />
             </article>
           </div>

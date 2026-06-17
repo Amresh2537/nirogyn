@@ -11,19 +11,25 @@
   "dependencies": {
     "@vercel/blob": "^2.4.0",
     "autoprefixer": "^10.5.0",
+    "dompurify": "^3.4.10",
     "lucide-react": "^1.17.0",
+    "marked": "^16.4.2",
     "mongodb": "^7.2.0",
     "mongoose": "^9.6.3",
     "next": "16.2.6",
     "postcss": "^8.5.15",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "turndown": "^7.2.2",
+    "turndown-plugin-gfm": "^1.0.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.0",
+    "@types/dompurify": "^3.2.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/turndown": "^5.0.5",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "tailwindcss": "^4.3.0",

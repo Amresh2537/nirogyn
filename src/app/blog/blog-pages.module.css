@@ -1048,6 +1048,25 @@
   font-size: clamp(1.24rem, 2.15vw, 1.56rem);
 }
 
+.storyProse h4 {
+  margin-top: 1.55rem;
+  font-size: clamp(1.06rem, 1.55vw, 1.28rem);
+}
+
+.storyProse h5 {
+  margin-top: 1.35rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.storyProse h6 {
+  margin-top: 1.15rem;
+  font-size: 0.86rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .storyProse a {
   color: #1d5b35;
   text-decoration: underline;
@@ -1059,7 +1078,7 @@
   color: #172b1e;
 }
 
-.storyProse p:first-of-type::first-letter {
+.storyLeadParagraph::first-letter {
   float: left;
   margin: 0.05rem 0.32rem 0 0;
   color: #1c4f2d;
@@ -1074,6 +1093,25 @@
   background: rgba(150, 174, 126, 0.14);
   padding: 0.95rem 1.05rem;
   color: #203827;
+}
+
+.storyProse hr {
+  border: 0;
+  border-top: 1px solid rgba(19, 37, 25, 0.18);
+  margin: 1.45rem 0;
+}
+
+.storyProse pre {
+  border: 1px solid rgba(19, 37, 25, 0.12);
+  border-radius: 0.55rem;
+  background: #edf2ea;
+  padding: 0.8rem 0.95rem;
+  overflow-x: auto;
+}
+
+.storyProse code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.92em;
 }
 
 .storyProse :where(img, video, iframe, table) {

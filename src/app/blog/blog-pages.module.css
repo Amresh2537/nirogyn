@@ -790,7 +790,7 @@
   align-items: center;
   margin-bottom: 0.95rem;
   border: 1px solid rgba(26, 53, 32, 0.22);
-  border-radius: 999px;
+  border-radius: 0;
   background: rgba(236, 244, 226, 0.68);
   padding: 0.35rem 0.72rem;
   color: #244c2f;

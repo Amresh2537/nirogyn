@@ -144,7 +144,7 @@ export default function Navbar({ solid = false }: NavbarProps) {
         {/* Left section */}
         <div
           className={`flex items-center justify-self-start ${
-            isMobile ? "gap-1.5" : "gap-6"
+            isMobile ? "gap-1.5" : "gap-0.5"
           }`}
         >
           {/* Hamburger button */}

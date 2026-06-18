@@ -985,7 +985,7 @@ section { padding: 7rem 4rem; }
 .articles-list { display: flex; flex-direction: column; gap: 1rem; }
 .article-mini {
   background: var(--cream); border-radius: 16px;
-  padding: 1.4rem 1.6rem;
+  padding: 0.7rem 1.6rem;
   display: flex; align-items: center; gap: 1.2rem;
   cursor: pointer; transition: all 0.3s; text-decoration: none;
 }
@@ -3642,4 +3642,8 @@ tr:hover .post-view-link { opacity: 1; }
   .admin-fields-row { grid-template-columns: 1fr; }
   .blog-listing-grid { grid-template-columns: 1fr; }
   .blog-listing-hero { padding: 6rem 1.4rem 3.5rem; }
+}
+
+.anmol{
+  padding: 0 1px 0 9px ! important;
 }

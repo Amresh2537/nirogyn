@@ -298,7 +298,7 @@ export default function Navbar({ solid = false }: NavbarProps) {
                   name="q"
                   placeholder="Search Articles"
                   aria-label="Search"
-                  className={`w-full h-full border-none bg-transparent outline-none pl-1 pr-9 text-[0.85rem] placeholder:text-[0.78rem] font-medium ${
+                  className={`anmol w-full h-full border-none bg-transparent outline-none pl-1 pr-9 text-[0.85rem] placeholder:text-[0.78rem] font-medium ${
                     useLightNav
                       ? "text-black placeholder:text-black/65"
                       : "text-white placeholder:text-white/70"

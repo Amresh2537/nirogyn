@@ -7,6 +7,7 @@ export const metadata = {
   description: "Key studies behind Nirogyn's five pillars — curated, dated, and explained in plain language.",
 };
 
+
 export default function ResearchLibrary() {
   return (
     <div className="ip-wrap">

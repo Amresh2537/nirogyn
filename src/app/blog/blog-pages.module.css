@@ -785,6 +785,12 @@
   padding: clamp(1rem, 2.4vw, 1.7rem);
 }
 
+@media (max-width: 768px) {
+  .storyCopy {
+    padding-top: 70px;
+  }
+}
+
 .storyBackLink {
   display: inline-flex;
   align-items: center;

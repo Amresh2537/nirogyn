@@ -3,7 +3,7 @@ import OptionalImage from "./OptionalImage";
 import { getPublishedPosts } from "@/lib/posts";
 
 export default async function Articles() {
-  const latestPosts = (await getPublishedPosts()).slice(0, 5);
+  const latestPosts = (await getPublishedPosts()).slice(0, 4);
 
   return (
     <section className="articles-section" id="articles">

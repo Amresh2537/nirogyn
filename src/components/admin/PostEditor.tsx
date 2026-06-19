@@ -25,11 +25,49 @@ interface PostForm {
   content: string;
 }
 
-const CATEGORIES = [
+const BLOG_CATEGORIES = [
   "Gut Health", "Mental Health", "Sleep", "Skin Health", "Nutrition",
   "Supplements", "Men's Health", "Women's Health", "Kids Health",
   "Fitness", "Ayurveda", "Research",
 ];
+
+const INGREDIENT_CATEGORIES = [
+  "Adaptogens", "Vitamins", "Minerals", "Antioxidants", "Superfoods",
+  "Fiber", "Amino Acids", "Probiotics", "Herbs", "Research",
+];
+
+type ContentType = "post" | "ingredient";
+
+const CONTENT_CONFIG = {
+  post: {
+    apiBase: "/api/admin/posts",
+    dashboardHref: "/admin",
+    editBase: "/admin/edit",
+    viewBase: "/blog",
+    categories: BLOG_CATEGORIES,
+    categoryListId: "blog-category-options",
+    showFeatured: true,
+    entityLabel: "Post",
+    titlePlaceholder: "Enter blog post title",
+    slugPlaceholder: "blog-post-slug",
+    excerptPlaceholder: "Brief description of the blog post",
+    publishLabel: "Publish Post",
+  },
+  ingredient: {
+    apiBase: "/api/admin/ingredients",
+    dashboardHref: "/admin/ingredients",
+    editBase: "/admin/ingredients/edit",
+    viewBase: "/ingredients",
+    categories: INGREDIENT_CATEGORIES,
+    categoryListId: "ingredient-category-options",
+    showFeatured: false,
+    entityLabel: "Ingredient",
+    titlePlaceholder: "Enter ingredient name",
+    slugPlaceholder: "ingredient-slug",
+    excerptPlaceholder: "Brief summary of this ingredient",
+    publishLabel: "Publish Ingredient",
+  },
+} as const;
 
 const EMPTY: PostForm = {
   title: "", slug: "", excerpt: "", author: "Nirogyn Editorial",
@@ -47,6 +85,7 @@ function slugify(text: string) {
 
 interface Props {
   postId?: string;
+  contentType?: ContentType;
 }
 
 marked.setOptions({
@@ -125,8 +164,9 @@ function renderFormattedHtml(content: string): string {
   });
 }
 
-export default function PostEditor({ postId }: Props) {
+export default function PostEditor({ postId, contentType = "post" }: Props) {
   const router = useRouter();
+  const config = CONTENT_CONFIG[contentType];
   const editorRef = useRef<HTMLTextAreaElement>(null);
   const selectionRef = useRef<{ start: number; end: number }>({ start: 0, end: 0 });
   const [form, setForm] = useState<PostForm>(EMPTY);
@@ -142,10 +182,10 @@ export default function PostEditor({ postId }: Props) {
   const isEdit = !!postId;
   const renderedPreviewHtml = useMemo(() => renderFormattedHtml(form.content), [form.content]);
 
-  // Load existing post
+  // Load existing content
   useEffect(() => {
     if (!postId) return;
-    fetch(`/api/admin/posts/${postId}`)
+    fetch(`${config.apiBase}/${postId}`)
       .then((r) => {
         if (!r.ok) { setLoadError(true); return null; }
         return r.json();
@@ -159,7 +199,7 @@ export default function PostEditor({ postId }: Props) {
           author: post.author,
           category: post.category,
           status: post.status,
-          featured: post.featured,
+          featured: post.featured ?? false,
           featuredImage: post.featuredImage ?? "",
           featuredImageAlt: post.featuredImageAlt ?? post.title,
           seoTitle: post.seoTitle ?? post.title,
@@ -168,7 +208,7 @@ export default function PostEditor({ postId }: Props) {
           content: markdownFromStoredContent(post.content ?? ""),
         });
       });
-  }, [postId]);
+  }, [postId, config.apiBase]);
 
   function set(field: keyof PostForm, value: string | boolean) {
     setForm((prev) => {
@@ -301,21 +341,24 @@ export default function PostEditor({ postId }: Props) {
     if (!payload.title.trim()) { alert("Title is required."); return; }
     if (!payload.slug.trim()) { alert("Slug is required."); return; }
 
+    const { featured: _featured, ...ingredientPayload } = payload;
+    const body = contentType === "ingredient" ? ingredientPayload : payload;
+
     setSaving(true);
     try {
-      const url = isEdit ? `/api/admin/posts/${postId}` : "/api/admin/posts";
+      const url = isEdit ? `${config.apiBase}/${postId}` : config.apiBase;
       const method = isEdit ? "PUT" : "POST";
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(body),
       });
       if (!res.ok) throw new Error("Save failed");
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
       if (!isEdit) {
         const data = await res.json();
-        router.replace(`/admin/edit/${data.id}`);
+        router.replace(`${config.editBase}/${data.id}`);
       }
     } catch {
       alert("Failed to save. Please try again.");
@@ -328,8 +371,8 @@ export default function PostEditor({ postId }: Props) {
     return (
       <div className="admin-wrap">
         <div className="admin-main" style={{ textAlign: "center", paddingTop: "4rem" }}>
-          <p style={{ color: "#ef4444" }}>Post not found.</p>
-          <Link href="/admin" className="admin-btn-primary" style={{ marginTop: "1rem", display: "inline-block" }}>
+          <p style={{ color: "#ef4444" }}>{config.entityLabel} not found.</p>
+          <Link href={config.dashboardHref} className="admin-btn-primary" style={{ marginTop: "1rem", display: "inline-block" }}>
             Back to Dashboard
           </Link>
         </div>
@@ -341,11 +384,11 @@ export default function PostEditor({ postId }: Props) {
     <div className="admin-wrap">
       {/* Navbar */}
       <header className="admin-nav">
-        <Link href="/admin" className="admin-nav-logo">
+        <Link href={config.dashboardHref} className="admin-nav-logo">
           <span className="admin-login-dot" />NIROGYN
         </Link>
         <div className="admin-nav-right">
-          <Link href="/admin" className="admin-btn-ghost">← Dashboard</Link>
+          <Link href={config.dashboardHref} className="admin-btn-ghost">← Dashboard</Link>
           {saved && <span className="admin-saved-badge">✓ Saved</span>}
           <button className="admin-btn-secondary" onClick={() => handleSave("draft")} disabled={saving}>
             Save Draft
@@ -368,7 +411,7 @@ export default function PostEditor({ postId }: Props) {
                 <label className="admin-label">Title <span className="admin-required">*</span></label>
                 <input
                   className="admin-input"
-                  placeholder="Enter blog post title"
+                  placeholder={config.titlePlaceholder}
                   value={form.title}
                   onChange={(e) => set("title", e.target.value)}
                 />
@@ -378,7 +421,7 @@ export default function PostEditor({ postId }: Props) {
                 <label className="admin-label">Slug <span className="admin-required">*</span></label>
                 <input
                   className="admin-input"
-                  placeholder="blog-post-slug"
+                  placeholder={config.slugPlaceholder}
                   value={form.slug}
                   onChange={(e) => set("slug", slugify(e.target.value))}
                 />
@@ -389,7 +432,7 @@ export default function PostEditor({ postId }: Props) {
                 <textarea
                   className="admin-textarea"
                   rows={3}
-                  placeholder="Brief description of the blog post"
+                  placeholder={config.excerptPlaceholder}
                   value={form.excerpt}
                   onChange={(e) => set("excerpt", e.target.value)}
                 />
@@ -595,26 +638,28 @@ export default function PostEditor({ postId }: Props) {
                 <label className="admin-label">Category</label>
                 <input
                   className="admin-input"
-                  list="blog-category-options"
+                  list={config.categoryListId}
                   placeholder="Type or choose a category"
                   value={form.category}
                   onChange={(e) => set("category", e.target.value)}
                 />
-                <datalist id="blog-category-options">
-                  {CATEGORIES.map((c) => (
+                <datalist id={config.categoryListId}>
+                  {config.categories.map((c) => (
                     <option key={c} value={c} />
                   ))}
                 </datalist>
               </div>
 
-              <label className="admin-checkbox-row">
-                <input
-                  type="checkbox"
-                  checked={form.featured}
-                  onChange={(e) => set("featured", e.target.checked)}
-                />
-                <span>Feature this post</span>
-              </label>
+              {config.showFeatured && (
+                <label className="admin-checkbox-row">
+                  <input
+                    type="checkbox"
+                    checked={form.featured}
+                    onChange={(e) => set("featured", e.target.checked)}
+                  />
+                  <span>Feature this post</span>
+                </label>
+              )}
             </div>
 
             {/* Featured Image */}
@@ -666,7 +711,7 @@ export default function PostEditor({ postId }: Props) {
                 onClick={() => handleSave("published")}
                 disabled={saving}
               >
-                {saving ? "Saving…" : "Publish Post"}
+                {saving ? "Saving…" : config.publishLabel}
               </button>
             </div>
           </div>

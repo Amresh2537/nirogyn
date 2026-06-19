@@ -92,6 +92,9 @@ export default function AdminDashboard() {
           <span className="admin-login-dot" />NIROGYN
         </Link>
         <div className="admin-nav-right">
+          <Link href="/admin/ingredients" className="admin-btn-ghost">
+            Ingredients
+          </Link>
           <span className="admin-nav-badge">Admin</span>
           <button className="admin-btn-ghost" onClick={handleLogout}>
             Sign Out

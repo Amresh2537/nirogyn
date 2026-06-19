@@ -3,7 +3,10 @@ import OptionalImage from "./OptionalImage";
 import { getPublishedPosts } from "@/lib/posts";
 
 export default async function Articles() {
-  const latestPosts = (await getPublishedPosts()).slice(0, 4);
+  const allPosts = await getPublishedPosts();
+  
+  // Get 4 posts from different categories
+  const selectedPosts = getPostsFromDifferentCategories(allPosts, 4);
 
   return (
     <section className="articles-section" id="articles">
@@ -48,7 +51,7 @@ export default async function Articles() {
         </Link>
 
         <div className="articles-list">
-          {latestPosts.map((post, i) => (
+          {selectedPosts.map((post, i) => (
             <Link href={`/blog/${post.slug}`} className="article-mini reveal" key={post.id}>
               <div className="mini-num">{String(i + 1).padStart(2, "0")}</div>
               <div className="mini-content">
@@ -69,7 +72,7 @@ export default async function Articles() {
             </Link>
           ))}
 
-          {latestPosts.length === 0 && (
+          {selectedPosts.length === 0 && (
             <div className="article-mini reveal" style={{ pointerEvents: "none" }}>
               <div className="mini-num">00</div>
               <div className="mini-content">
@@ -89,4 +92,41 @@ export default async function Articles() {
       </div>
     </section>
   );
+}
+
+// Helper function to get posts from different categories
+function getPostsFromDifferentCategories(posts: any[], count: number) {
+  // Group posts by category
+  const categorizedPosts: { [key: string]: any[] } = {};
+  
+  posts.forEach(post => {
+    const category = post.category || "Uncategorized";
+    if (!categorizedPosts[category]) {
+      categorizedPosts[category] = [];
+    }
+    categorizedPosts[category].push(post);
+  });
+
+  // Get one post from each category (preferring the most recent)
+  const selectedPosts: any[] = [];
+  const categories = Object.keys(categorizedPosts);
+  
+  // Shuffle categories for variety or sort by category name for consistency
+  // For variety, shuffle: categories.sort(() => Math.random() - 0.5);
+  categories.sort(); // Sort alphabetically for consistent results
+  
+  for (const category of categories) {
+    if (selectedPosts.length >= count) break;
+    
+    // Get the most recent post from this category
+    const categoryPosts = categorizedPosts[category];
+    const mostRecent = categoryPosts.sort((a, b) => {
+      return new Date(b.date || b.publishedAt || 0).getTime() - 
+             new Date(a.date || a.publishedAt || 0).getTime();
+    })[0];
+    
+    selectedPosts.push(mostRecent);
+  }
+
+  return selectedPosts;
 }

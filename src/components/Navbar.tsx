@@ -94,15 +94,15 @@ export default function Navbar({ solid = false }: NavbarProps) {
     { label: "REPRODUCE", href: "/blog?category=Reproduce" },
   ];
 
-  // Mobile dropdown items (includes all items)
+  // Mobile dropdown items (includes all items with correct links)
   const mobileTopics = [
     { label: "EAT", href: "/blog?category=Eat" },
     { label: "MOVE", href: "/blog?category=Move" },
     { label: "MIND", href: "/blog?category=Mind" },
     { label: "SLEEP", href: "/blog?category=Sleep" },
     { label: "REPRODUCE", href: "/blog?category=Reproduce" },
-    { label: "SCIENCE", href: "#science" },
-    { label: "KNOW YOUR INGREDIENTS", href: "/blog" },
+    { label: "SCIENCE", href: "/science/research-library" },
+    { label: "KNOW YOUR INGREDIENTS", href: "/ingredients" },
   ];
 
   const useLightNav = forceSolid || isHovering || isScrolled || isMenuOpen;
@@ -215,31 +215,33 @@ export default function Navbar({ solid = false }: NavbarProps) {
                     Topics
                   </div>
 
-                  {/* Nav items */}
-                  {mobileTopics.map((item) => (
-                    <a
-                      key={item.label}
-                      href={item.href}
-                      onClick={() => setIsMenuOpen(false)}
-                      className="group flex items-center justify-between no-underline transition-colors duration-150 hover:bg-[rgba(16,63,34,0.05)]"
-                      style={{
-                        padding: "11px 18px",
-                        color: "#1a3c1e",
-                        fontSize: item.label === "KNOW YOUR INGREDIENTS" ? "0.82rem" : "0.88rem",
-                        fontWeight: 400,
-                        letterSpacing: "0.06em",
-                        borderBottom: "0.5px solid rgba(16,63,34,0.06)",
-                      }}
-                    >
-                      {item.label}
-                      <span
-                        className="transition-transform duration-200 group-hover:translate-x-1"
-                        style={{ fontSize: "0.78rem", color: "rgba(31,53,36,0.35)" }}
+                  {/* Nav items - Using Next.js Link for client-side navigation */}
+                  <div>
+                    {mobileTopics.map((item) => (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        onClick={() => setIsMenuOpen(false)}
+                        className="group flex items-center justify-between no-underline transition-colors duration-150 hover:bg-[rgba(16,63,34,0.05)]"
+                        style={{
+                          padding: "11px 18px",
+                          color: "#1a3c1e",
+                          fontSize: item.label === "KNOW YOUR INGREDIENTS" ? "0.82rem" : "0.88rem",
+                          fontWeight: 400,
+                          letterSpacing: "0.06em",
+                          borderBottom: "0.5px solid rgba(16,63,34,0.06)",
+                        }}
                       >
-                        →
-                      </span>
-                    </a>
-                  ))}
+                        {item.label}
+                        <span
+                          className="transition-transform duration-200 group-hover:translate-x-1"
+                          style={{ fontSize: "0.78rem", color: "rgba(31,53,36,0.35)" }}
+                        >
+                          →
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}
@@ -249,7 +251,7 @@ export default function Navbar({ solid = false }: NavbarProps) {
           {!isMobile && (
             <>
               {desktopTopics.map((item) => (
-                <a
+                <Link
                   key={item.label}
                   href={item.href}
                   className={`no-underline px-3 py-1 text-[1.02rem] tracking-[0.02em] leading-none font-normal ${
@@ -260,7 +262,7 @@ export default function Navbar({ solid = false }: NavbarProps) {
                   }}
                 >
                   {item.label}
-                </a>
+                </Link>
               ))}
             </>
           )}

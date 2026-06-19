@@ -1,13 +1,9 @@
-const INGREDIENTS = [
-  { img: "ashwagandha", name: "Ashwagandha", desc: "Stress, energy & hormonal balance" },
-  { img: "vitamin-d3", name: "Vitamin D3", desc: "Immunity, bones & mood support" },
-  { img: "lutein", name: "Lutein", desc: "Eye health & vision support" },
-  { img: "chia-seeds", name: "Chia Seeds", desc: "Fiber, omega-3 & heart health" },
-  { img: "magnesium-citrate", name: "Magnesium Citrate", desc: "Sleep, muscle function & stress support" },
-  { img: "psyllium-husk", name: "Psyllium Husk", desc: "Digestive health, regularity & cholesterol support" },
-];
+import Link from "next/link";
+import { getPublishedIngredients } from "@/lib/ingredients";
 
-export default function Ingredients() {
+export default async function Ingredients() {
+  const ingredients = (await getPublishedIngredients()).slice(0, 6);
+
   return (
     <section className="ingredients-section" id="ingredients">
       <div className="ingredients-inner">
@@ -18,20 +14,37 @@ export default function Ingredients() {
               Learn about key ingredients, their benefits, dosage, sources and side effects.
             </p>
           </div>
-          <a href="/blog" className="ingredients-link">Explore All Ingredients →</a>
+          <Link href="/ingredients" className="ingredients-link">
+            Explore All Ingredients →
+          </Link>
         </div>
 
         <div className="ingredients-grid-clean">
-          {INGREDIENTS.map(({ img, name, desc }) => (
-            <article className="ingredient-clean-card" key={name}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={`/images/ingredients/${img}.jpeg`} alt={name} className="ingredient-clean-image" />
-              <div className="ingredient-clean-body">
-                <h3 className="ingredient-clean-title">{name}</h3>
-                <p className="ingredient-clean-desc">{desc}</p>
-              </div>
-            </article>
-          ))}
+          {ingredients.length > 0 ? (
+            ingredients.map((ingredient) => (
+              <Link
+                href={`/ingredients/${ingredient.slug}`}
+                className="ingredient-clean-card"
+                key={ingredient.id}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={
+                    ingredient.featuredImage ||
+                    `/images/ingredients/${ingredient.slug}.jpeg`
+                  }
+                  alt={ingredient.featuredImageAlt || ingredient.title}
+                  className="ingredient-clean-image"
+                />
+                <div className="ingredient-clean-body">
+                  <h3 className="ingredient-clean-title">{ingredient.title}</h3>
+                  <p className="ingredient-clean-desc">{ingredient.excerpt}</p>
+                </div>
+              </Link>
+            ))
+          ) : (
+            <p className="ingredients-subtitle">Ingredient guides coming soon.</p>
+          )}
         </div>
       </div>
     </section>
